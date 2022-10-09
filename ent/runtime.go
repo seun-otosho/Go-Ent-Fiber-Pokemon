@@ -4,8 +4,10 @@ package ent
 
 import (
 	"GoEntFiberPokeman/ent/battle"
+	"GoEntFiberPokeman/ent/group"
 	"GoEntFiberPokeman/ent/pokemon"
 	"GoEntFiberPokeman/ent/schema"
+	"GoEntFiberPokeman/ent/user"
 	"time"
 )
 
@@ -23,6 +25,12 @@ func init() {
 	battleDescUpdatedAt := battleFields[3].Descriptor()
 	// battle.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	battle.DefaultUpdatedAt = battleDescUpdatedAt.Default.(func() time.Time)
+	groupFields := schema.Group{}.Fields()
+	_ = groupFields
+	// groupDescName is the schema descriptor for name field.
+	groupDescName := groupFields[0].Descriptor()
+	// group.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	group.NameValidator = groupDescName.Validators[0].(func(string) error)
 	pokemonFields := schema.Pokemon{}.Fields()
 	_ = pokemonFields
 	// pokemonDescName is the schema descriptor for name field.
@@ -41,4 +49,14 @@ func init() {
 	pokemonDescUpdatedAt := pokemonFields[6].Descriptor()
 	// pokemon.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	pokemon.DefaultUpdatedAt = pokemonDescUpdatedAt.Default.(func() time.Time)
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescAge is the schema descriptor for age field.
+	userDescAge := userFields[0].Descriptor()
+	// user.AgeValidator is a validator for the "age" field. It is called by the builders before save.
+	user.AgeValidator = userDescAge.Validators[0].(func(int) error)
+	// userDescName is the schema descriptor for name field.
+	userDescName := userFields[1].Descriptor()
+	// user.DefaultName holds the default value on creation for the name field.
+	user.DefaultName = userDescName.Default.(string)
 }

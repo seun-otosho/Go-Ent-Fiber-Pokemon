@@ -9,5 +9,14 @@ import (
 // Battle is the predicate function for battle builders.
 type Battle func(*sql.Selector)
 
+// Car is the predicate function for car builders.
+type Car func(*sql.Selector)
+
+// Group is the predicate function for group builders.
+type Group func(*sql.Selector)
+
 // Pokemon is the predicate function for pokemon builders.
 type Pokemon func(*sql.Selector)
+
+// User is the predicate function for user builders.
+type User func(*sql.Selector)

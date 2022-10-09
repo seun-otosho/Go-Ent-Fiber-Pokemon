@@ -4,7 +4,10 @@ package ent
 
 import (
 	"GoEntFiberPokeman/ent/battle"
+	"GoEntFiberPokeman/ent/car"
+	"GoEntFiberPokeman/ent/group"
 	"GoEntFiberPokeman/ent/pokemon"
+	"GoEntFiberPokeman/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -33,7 +36,10 @@ type OrderFunc func(*sql.Selector)
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		battle.Table:  battle.ValidColumn,
+		car.Table:     car.ValidColumn,
+		group.Table:   group.ValidColumn,
 		pokemon.Table: pokemon.ValidColumn,
+		user.Table:    user.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

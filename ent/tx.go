@@ -14,8 +14,14 @@ type Tx struct {
 	config
 	// Battle is the client for interacting with the Battle builders.
 	Battle *BattleClient
+	// Car is the client for interacting with the Car builders.
+	Car *CarClient
+	// Group is the client for interacting with the Group builders.
+	Group *GroupClient
 	// Pokemon is the client for interacting with the Pokemon builders.
 	Pokemon *PokemonClient
+	// User is the client for interacting with the User builders.
+	User *UserClient
 
 	// lazily loaded.
 	client     *Client
@@ -152,7 +158,10 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Battle = NewBattleClient(tx.config)
+	tx.Car = NewCarClient(tx.config)
+	tx.Group = NewGroupClient(tx.config)
 	tx.Pokemon = NewPokemonClient(tx.config)
+	tx.User = NewUserClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
