@@ -57,10 +57,6 @@ type ListBattleRes interface {
 	listBattleRes()
 }
 
-type ListCarCarsRes interface {
-	listCarCarsRes()
-}
-
 type ListCarRes interface {
 	listCarRes()
 }

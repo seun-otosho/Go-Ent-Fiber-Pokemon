@@ -32,21 +32,6 @@ func (cc *CarCreate) SetRegisteredAt(t time.Time) *CarCreate {
 	return cc
 }
 
-// AddCarIDs adds the "cars" edge to the Car entity by IDs.
-func (cc *CarCreate) AddCarIDs(ids ...int) *CarCreate {
-	cc.mutation.AddCarIDs(ids...)
-	return cc
-}
-
-// AddCars adds the "cars" edges to the Car entity.
-func (cc *CarCreate) AddCars(c ...*Car) *CarCreate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return cc.AddCarIDs(ids...)
-}
-
 // Mutation returns the CarMutation object of the builder.
 func (cc *CarCreate) Mutation() *CarMutation {
 	return cc.mutation
@@ -171,25 +156,6 @@ func (cc *CarCreate) createSpec() (*Car, *sqlgraph.CreateSpec) {
 			Column: car.FieldRegisteredAt,
 		})
 		_node.RegisteredAt = value
-	}
-	if nodes := cc.mutation.CarsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   car.CarsTable,
-			Columns: car.CarsPrimaryKey,
-			Bidi:    true,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: car.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

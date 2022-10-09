@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -255,34 +254,6 @@ func RegisteredAtLT(v time.Time) predicate.Car {
 func RegisteredAtLTE(v time.Time) predicate.Car {
 	return predicate.Car(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldRegisteredAt), v))
-	})
-}
-
-// HasCars applies the HasEdge predicate on the "cars" edge.
-func HasCars() predicate.Car {
-	return predicate.Car(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CarsTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, CarsTable, CarsPrimaryKey...),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasCarsWith applies the HasEdge predicate on the "cars" edge with a given conditions (other predicates).
-func HasCarsWith(preds ...predicate.Car) predicate.Car {
-	return predicate.Car(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, CarsTable, CarsPrimaryKey...),
-		)
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
 	})
 }
 

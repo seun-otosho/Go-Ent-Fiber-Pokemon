@@ -3,71 +3,9 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
-	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
-	"strings"
-	"sync"
 	"time"
 
-	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
 )
 
 // Ref: #/components/schemas/Battle_ContenderRead
@@ -134,13 +72,6 @@ type BattleUpdate struct {
 
 func (*BattleUpdate) updateBattleRes() {}
 
-// Ref: #/components/schemas/Car_CarsList
-type CarCarsList struct {
-	ID           int       "json:\"id\""
-	Model        string    "json:\"model\""
-	RegisteredAt time.Time "json:\"registered_at\""
-}
-
 // Ref: #/components/schemas/CarCreate
 type CarCreate struct {
 	ID           int       "json:\"id\""
@@ -186,7 +117,6 @@ type CreateBattleReq struct {
 type CreateCarReq struct {
 	Model        string    "json:\"model\""
 	RegisteredAt time.Time "json:\"registered_at\""
-	Cars         []int     "json:\"cars\""
 }
 
 type CreateGroupReq struct {
@@ -297,10 +227,6 @@ type GroupUsersList struct {
 type ListBattleOKApplicationJSON []BattleList
 
 func (ListBattleOKApplicationJSON) listBattleRes() {}
-
-type ListCarCarsOKApplicationJSON []CarCarsList
-
-func (ListCarCarsOKApplicationJSON) listCarCarsRes() {}
 
 type ListCarOKApplicationJSON []CarList
 
@@ -645,7 +571,6 @@ func (*R400) deletePetRes()            {}
 func (*R400) deletePokemonRes()        {}
 func (*R400) deleteUserRes()           {}
 func (*R400) listBattleRes()           {}
-func (*R400) listCarCarsRes()          {}
 func (*R400) listCarRes()              {}
 func (*R400) listGroupRes()            {}
 func (*R400) listGroupUsersRes()       {}
@@ -684,7 +609,6 @@ func (*R404) deletePetRes()            {}
 func (*R404) deletePokemonRes()        {}
 func (*R404) deleteUserRes()           {}
 func (*R404) listBattleRes()           {}
-func (*R404) listCarCarsRes()          {}
 func (*R404) listCarRes()              {}
 func (*R404) listGroupRes()            {}
 func (*R404) listGroupUsersRes()       {}
@@ -729,7 +653,6 @@ func (*R409) deletePetRes()            {}
 func (*R409) deletePokemonRes()        {}
 func (*R409) deleteUserRes()           {}
 func (*R409) listBattleRes()           {}
-func (*R409) listCarCarsRes()          {}
 func (*R409) listCarRes()              {}
 func (*R409) listGroupRes()            {}
 func (*R409) listGroupUsersRes()       {}
@@ -774,7 +697,6 @@ func (*R500) deletePetRes()            {}
 func (*R500) deletePokemonRes()        {}
 func (*R500) deleteUserRes()           {}
 func (*R500) listBattleRes()           {}
-func (*R500) listCarCarsRes()          {}
 func (*R500) listCarRes()              {}
 func (*R500) listGroupRes()            {}
 func (*R500) listGroupUsersRes()       {}
@@ -810,7 +732,6 @@ type UpdateBattleReq struct {
 type UpdateCarReq struct {
 	Model        OptString   "json:\"model\""
 	RegisteredAt OptDateTime "json:\"registered_at\""
-	Cars         []int       "json:\"cars\""
 }
 
 type UpdateGroupReq struct {

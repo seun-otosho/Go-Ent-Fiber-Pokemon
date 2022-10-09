@@ -596,9 +596,6 @@ type CarMutation struct {
 	model         *string
 	registered_at *time.Time
 	clearedFields map[string]struct{}
-	cars          map[int]struct{}
-	removedcars   map[int]struct{}
-	clearedcars   bool
 	done          bool
 	oldValue      func(context.Context) (*Car, error)
 	predicates    []predicate.Car
@@ -774,60 +771,6 @@ func (m *CarMutation) ResetRegisteredAt() {
 	m.registered_at = nil
 }
 
-// AddCarIDs adds the "cars" edge to the Car entity by ids.
-func (m *CarMutation) AddCarIDs(ids ...int) {
-	if m.cars == nil {
-		m.cars = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.cars[ids[i]] = struct{}{}
-	}
-}
-
-// ClearCars clears the "cars" edge to the Car entity.
-func (m *CarMutation) ClearCars() {
-	m.clearedcars = true
-}
-
-// CarsCleared reports if the "cars" edge to the Car entity was cleared.
-func (m *CarMutation) CarsCleared() bool {
-	return m.clearedcars
-}
-
-// RemoveCarIDs removes the "cars" edge to the Car entity by IDs.
-func (m *CarMutation) RemoveCarIDs(ids ...int) {
-	if m.removedcars == nil {
-		m.removedcars = make(map[int]struct{})
-	}
-	for i := range ids {
-		delete(m.cars, ids[i])
-		m.removedcars[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedCars returns the removed IDs of the "cars" edge to the Car entity.
-func (m *CarMutation) RemovedCarsIDs() (ids []int) {
-	for id := range m.removedcars {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// CarsIDs returns the "cars" edge IDs in the mutation.
-func (m *CarMutation) CarsIDs() (ids []int) {
-	for id := range m.cars {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetCars resets all changes to the "cars" edge.
-func (m *CarMutation) ResetCars() {
-	m.cars = nil
-	m.clearedcars = false
-	m.removedcars = nil
-}
-
 // Where appends a list predicates to the CarMutation builder.
 func (m *CarMutation) Where(ps ...predicate.Car) {
 	m.predicates = append(m.predicates, ps...)
@@ -963,85 +906,49 @@ func (m *CarMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CarMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.cars != nil {
-		edges = append(edges, car.EdgeCars)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *CarMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case car.EdgeCars:
-		ids := make([]ent.Value, 0, len(m.cars))
-		for id := range m.cars {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CarMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.removedcars != nil {
-		edges = append(edges, car.EdgeCars)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *CarMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case car.EdgeCars:
-		ids := make([]ent.Value, 0, len(m.removedcars))
-		for id := range m.removedcars {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CarMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedcars {
-		edges = append(edges, car.EdgeCars)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *CarMutation) EdgeCleared(name string) bool {
-	switch name {
-	case car.EdgeCars:
-		return m.clearedcars
-	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *CarMutation) ClearEdge(name string) error {
-	switch name {
-	}
 	return fmt.Errorf("unknown Car unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *CarMutation) ResetEdge(name string) error {
-	switch name {
-	case car.EdgeCars:
-		m.ResetCars()
-		return nil
-	}
 	return fmt.Errorf("unknown Car edge %s", name)
 }
 

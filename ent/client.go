@@ -365,22 +365,6 @@ func (c *CarClient) GetX(ctx context.Context, id int) *Car {
 	return obj
 }
 
-// QueryCars queries the cars edge of a Car.
-func (c *CarClient) QueryCars(ca *Car) *CarQuery {
-	query := &CarQuery{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
-		id := ca.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(car.Table, car.FieldID, id),
-			sqlgraph.To(car.Table, car.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, car.CarsTable, car.CarsPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(ca.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *CarClient) Hooks() []Hook {
 	return c.hooks.Car

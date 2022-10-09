@@ -11,12 +11,8 @@ const (
 	FieldModel = "model"
 	// FieldRegisteredAt holds the string denoting the registered_at field in the database.
 	FieldRegisteredAt = "registered_at"
-	// EdgeCars holds the string denoting the cars edge name in mutations.
-	EdgeCars = "cars"
 	// Table holds the table name of the car in the database.
 	Table = "cars"
-	// CarsTable is the table that holds the cars relation/edge. The primary key declared below.
-	CarsTable = "car_cars"
 )
 
 // Columns holds all SQL columns for car fields.
@@ -31,12 +27,6 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"user_cars",
 }
-
-var (
-	// CarsPrimaryKey and CarsColumn2 are the table columns denoting the
-	// primary key for the cars relation (M2M).
-	CarsPrimaryKey = []string{"car_id", "car_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {

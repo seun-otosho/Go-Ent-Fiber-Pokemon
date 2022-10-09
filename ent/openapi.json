@@ -138,10 +138,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -181,10 +181,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -217,10 +217,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -288,10 +288,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -333,10 +333,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -439,12 +439,6 @@
                   "registered_at": {
                     "type": "string",
                     "format": "date-time"
-                  },
-                  "cars": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer"
-                    }
                   }
                 },
                 "required": [
@@ -492,10 +486,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Car",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -535,10 +529,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Car",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -571,10 +565,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Car",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -590,12 +584,6 @@
                   "registered_at": {
                     "type": "string",
                     "format": "date-time"
-                  },
-                  "cars": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer"
-                    }
                   }
                 }
               }
@@ -610,70 +598,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CarUpdate"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "409": {
-            "$ref": "#/components/responses/409"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/cars/{id}/cars": {
-      "get": {
-        "tags": [
-          "Car"
-        ],
-        "summary": "List attached Cars",
-        "description": "List attached Cars.",
-        "operationId": "listCarCars",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Car",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "what page to render",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "itemsPerPage",
-            "in": "query",
-            "description": "item count to render per page",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "result Cars list",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Car_CarsList"
-                  }
                 }
               }
             }
@@ -830,10 +754,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Group",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -873,10 +797,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Group",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -909,10 +833,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Group",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -976,10 +900,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Group",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -1147,10 +1071,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1190,10 +1114,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1226,10 +1150,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -1429,10 +1353,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pokemon",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1472,10 +1396,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pokemon",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1508,10 +1432,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pokemon",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -1596,10 +1520,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pokemon",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -1660,10 +1584,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pokemon",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -1843,10 +1767,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1886,10 +1810,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1922,10 +1846,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -1998,10 +1922,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -2062,10 +1986,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -2337,12 +2261,6 @@
           "registered_at": {
             "type": "string",
             "format": "date-time"
-          },
-          "cars": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Car"
-            }
           }
         },
         "required": [
@@ -2412,26 +2330,6 @@
         ]
       },
       "CarUpdate": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "model": {
-            "type": "string"
-          },
-          "registered_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "id",
-          "model",
-          "registered_at"
-        ]
-      },
-      "Car_CarsList": {
         "type": "object",
         "properties": {
           "id": {

@@ -6,7 +6,6 @@ import (
 	"GoEntFiberPokeman/ent/car"
 	"GoEntFiberPokeman/ent/predicate"
 	"context"
-	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -24,7 +23,6 @@ type CarQuery struct {
 	order      []OrderFunc
 	fields     []string
 	predicates []predicate.Car
-	withCars   *CarQuery
 	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -60,28 +58,6 @@ func (cq *CarQuery) Unique(unique bool) *CarQuery {
 func (cq *CarQuery) Order(o ...OrderFunc) *CarQuery {
 	cq.order = append(cq.order, o...)
 	return cq
-}
-
-// QueryCars chains the current query on the "cars" edge.
-func (cq *CarQuery) QueryCars() *CarQuery {
-	query := &CarQuery{config: cq.config}
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := cq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(car.Table, car.FieldID, selector),
-			sqlgraph.To(car.Table, car.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, car.CarsTable, car.CarsPrimaryKey...),
-		)
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // First returns the first Car entity from the query.
@@ -265,23 +241,11 @@ func (cq *CarQuery) Clone() *CarQuery {
 		offset:     cq.offset,
 		order:      append([]OrderFunc{}, cq.order...),
 		predicates: append([]predicate.Car{}, cq.predicates...),
-		withCars:   cq.withCars.Clone(),
 		// clone intermediate query.
 		sql:    cq.sql.Clone(),
 		path:   cq.path,
 		unique: cq.unique,
 	}
-}
-
-// WithCars tells the query-builder to eager-load the nodes that are connected to
-// the "cars" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *CarQuery) WithCars(opts ...func(*CarQuery)) *CarQuery {
-	query := &CarQuery{config: cq.config}
-	for _, opt := range opts {
-		opt(query)
-	}
-	cq.withCars = query
-	return cq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -350,12 +314,9 @@ func (cq *CarQuery) prepareQuery(ctx context.Context) error {
 
 func (cq *CarQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Car, error) {
 	var (
-		nodes       = []*Car{}
-		withFKs     = cq.withFKs
-		_spec       = cq.querySpec()
-		loadedTypes = [1]bool{
-			cq.withCars != nil,
-		}
+		nodes   = []*Car{}
+		withFKs = cq.withFKs
+		_spec   = cq.querySpec()
 	)
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, car.ForeignKeys...)
@@ -366,7 +327,6 @@ func (cq *CarQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Car, err
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Car{config: cq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -378,73 +338,7 @@ func (cq *CarQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Car, err
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := cq.withCars; query != nil {
-		if err := cq.loadCars(ctx, query, nodes,
-			func(n *Car) { n.Edges.Cars = []*Car{} },
-			func(n *Car, e *Car) { n.Edges.Cars = append(n.Edges.Cars, e) }); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
-}
-
-func (cq *CarQuery) loadCars(ctx context.Context, query *CarQuery, nodes []*Car, init func(*Car), assign func(*Car, *Car)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*Car)
-	nids := make(map[int]map[*Car]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(car.CarsTable)
-		s.Join(joinT).On(s.C(car.FieldID), joinT.C(car.CarsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(car.CarsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(car.CarsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	neighbors, err := query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-		assign := spec.Assign
-		values := spec.ScanValues
-		spec.ScanValues = func(columns []string) ([]any, error) {
-			values, err := values(columns[1:])
-			if err != nil {
-				return nil, err
-			}
-			return append([]any{new(sql.NullInt64)}, values...), nil
-		}
-		spec.Assign = func(columns []string, values []any) error {
-			outValue := int(values[0].(*sql.NullInt64).Int64)
-			inValue := int(values[1].(*sql.NullInt64).Int64)
-			if nids[inValue] == nil {
-				nids[inValue] = map[*Car]struct{}{byID[outValue]: struct{}{}}
-				return assign(columns[1:], values[1:])
-			}
-			nids[inValue][byID[outValue]] = struct{}{}
-			return nil
-		}
-	})
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "cars" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
 }
 
 func (cq *CarQuery) sqlCount(ctx context.Context) (int, error) {

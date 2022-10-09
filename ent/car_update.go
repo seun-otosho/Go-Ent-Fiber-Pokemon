@@ -40,45 +40,9 @@ func (cu *CarUpdate) SetRegisteredAt(t time.Time) *CarUpdate {
 	return cu
 }
 
-// AddCarIDs adds the "cars" edge to the Car entity by IDs.
-func (cu *CarUpdate) AddCarIDs(ids ...int) *CarUpdate {
-	cu.mutation.AddCarIDs(ids...)
-	return cu
-}
-
-// AddCars adds the "cars" edges to the Car entity.
-func (cu *CarUpdate) AddCars(c ...*Car) *CarUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return cu.AddCarIDs(ids...)
-}
-
 // Mutation returns the CarMutation object of the builder.
 func (cu *CarUpdate) Mutation() *CarMutation {
 	return cu.mutation
-}
-
-// ClearCars clears all "cars" edges to the Car entity.
-func (cu *CarUpdate) ClearCars() *CarUpdate {
-	cu.mutation.ClearCars()
-	return cu
-}
-
-// RemoveCarIDs removes the "cars" edge to Car entities by IDs.
-func (cu *CarUpdate) RemoveCarIDs(ids ...int) *CarUpdate {
-	cu.mutation.RemoveCarIDs(ids...)
-	return cu
-}
-
-// RemoveCars removes "cars" edges to Car entities.
-func (cu *CarUpdate) RemoveCars(c ...*Car) *CarUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return cu.RemoveCarIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -167,60 +131,6 @@ func (cu *CarUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: car.FieldRegisteredAt,
 		})
 	}
-	if cu.mutation.CarsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   car.CarsTable,
-			Columns: car.CarsPrimaryKey,
-			Bidi:    true,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: car.FieldID,
-				},
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.RemovedCarsIDs(); len(nodes) > 0 && !cu.mutation.CarsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   car.CarsTable,
-			Columns: car.CarsPrimaryKey,
-			Bidi:    true,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: car.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.CarsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   car.CarsTable,
-			Columns: car.CarsPrimaryKey,
-			Bidi:    true,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: car.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{car.Label}
@@ -252,45 +162,9 @@ func (cuo *CarUpdateOne) SetRegisteredAt(t time.Time) *CarUpdateOne {
 	return cuo
 }
 
-// AddCarIDs adds the "cars" edge to the Car entity by IDs.
-func (cuo *CarUpdateOne) AddCarIDs(ids ...int) *CarUpdateOne {
-	cuo.mutation.AddCarIDs(ids...)
-	return cuo
-}
-
-// AddCars adds the "cars" edges to the Car entity.
-func (cuo *CarUpdateOne) AddCars(c ...*Car) *CarUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return cuo.AddCarIDs(ids...)
-}
-
 // Mutation returns the CarMutation object of the builder.
 func (cuo *CarUpdateOne) Mutation() *CarMutation {
 	return cuo.mutation
-}
-
-// ClearCars clears all "cars" edges to the Car entity.
-func (cuo *CarUpdateOne) ClearCars() *CarUpdateOne {
-	cuo.mutation.ClearCars()
-	return cuo
-}
-
-// RemoveCarIDs removes the "cars" edge to Car entities by IDs.
-func (cuo *CarUpdateOne) RemoveCarIDs(ids ...int) *CarUpdateOne {
-	cuo.mutation.RemoveCarIDs(ids...)
-	return cuo
-}
-
-// RemoveCars removes "cars" edges to Car entities.
-func (cuo *CarUpdateOne) RemoveCars(c ...*Car) *CarUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return cuo.RemoveCarIDs(ids...)
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -408,60 +282,6 @@ func (cuo *CarUpdateOne) sqlSave(ctx context.Context) (_node *Car, err error) {
 			Value:  value,
 			Column: car.FieldRegisteredAt,
 		})
-	}
-	if cuo.mutation.CarsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   car.CarsTable,
-			Columns: car.CarsPrimaryKey,
-			Bidi:    true,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: car.FieldID,
-				},
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.RemovedCarsIDs(); len(nodes) > 0 && !cuo.mutation.CarsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   car.CarsTable,
-			Columns: car.CarsPrimaryKey,
-			Bidi:    true,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: car.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.CarsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   car.CarsTable,
-			Columns: car.CarsPrimaryKey,
-			Bidi:    true,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: car.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Car{config: cuo.config}
 	_spec.Assign = _node.assignValues

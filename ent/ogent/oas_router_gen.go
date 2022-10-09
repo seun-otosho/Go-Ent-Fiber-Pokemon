@@ -3,75 +3,16 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
 	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
 	"strings"
-	"sync"
-	"time"
-
-	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
 )
 
 func (s *Server) notFound(w http.ResponseWriter, r *http.Request) {
 	s.cfg.NotFound(w, r)
+}
+
+func (s *Server) notAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
+	s.cfg.MethodNotAllowed(w, r, allowed)
 }
 
 // ServeHTTP serves http request as defined by OpenAPI v3 specification,
@@ -83,9 +24,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	args := [1]string{}
+
 	// Static code generated router with unwrapped path search.
-	switch r.Method {
-	case "DELETE":
+	switch {
+	default:
 		if len(elem) == 0 {
 			break
 		}
@@ -98,167 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if len(elem) == 0 {
-				s.handleDeleteCarRequest([1]string{
-					args[0],
-				}, w, r)
-
-				return
-			}
-			switch elem[0] {
-			case 'b': // Prefix: "battles/"
-				if l := len("battles/"); len(elem) >= l && elem[0:l] == "battles/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteBattle
-					s.handleDeleteBattleRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'c': // Prefix: "cars/"
-				if l := len("cars/"); len(elem) >= l && elem[0:l] == "cars/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteCar
-					s.handleDeleteCarRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'g': // Prefix: "groups/"
-				if l := len("groups/"); len(elem) >= l && elem[0:l] == "groups/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteGroup
-					s.handleDeleteGroupRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'p': // Prefix: "p"
-				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					s.handleDeletePokemonRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-				switch elem[0] {
-				case 'e': // Prefix: "ets/"
-					if l := len("ets/"); len(elem) >= l && elem[0:l] == "ets/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: DeletePet
-						s.handleDeletePetRequest([1]string{
-							args[0],
-						}, w, r)
-
-						return
-					}
-				case 'o': // Prefix: "okemons/"
-					if l := len("okemons/"); len(elem) >= l && elem[0:l] == "okemons/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: DeletePokemon
-						s.handleDeletePokemonRequest([1]string{
-							args[0],
-						}, w, r)
-
-						return
-					}
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteUser
-					s.handleDeleteUserRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			}
-		}
-	case "GET":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
 				break
-			}
-
-			if len(elem) == 0 {
-				s.handleListBattleRequest([0]string{}, w, r)
-
-				return
 			}
 			switch elem[0] {
 			case 'b': // Prefix: "battles"
@@ -269,7 +51,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListBattleRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListBattleRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateBattleRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -291,9 +80,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						s.handleReadBattleRequest([1]string{
-							args[0],
-						}, w, r)
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteBattleRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadBattleRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateBattleRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
 
 						return
 					}
@@ -306,11 +108,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						if len(elem) == 0 {
-							s.handleReadBattleOponentRequest([1]string{
-								args[0],
-							}, w, r)
-
-							return
+							break
 						}
 						switch elem[0] {
 						case 'c': // Prefix: "contender"
@@ -321,10 +119,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadBattleContender
-								s.handleReadBattleContenderRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleReadBattleContenderRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
@@ -336,10 +139,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadBattleOponent
-								s.handleReadBattleOponentRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleReadBattleOponentRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
@@ -354,7 +162,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListCarRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListCarRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateCarRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -367,37 +182,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					// Param: "id"
-					// Match until "/"
-					idx := strings.IndexByte(elem, '/')
-					if idx < 0 {
-						idx = len(elem)
-					}
-					args[0] = elem[:idx]
-					elem = elem[idx:]
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
 
 					if len(elem) == 0 {
-						s.handleReadCarRequest([1]string{
-							args[0],
-						}, w, r)
-
-						return
-					}
-					switch elem[0] {
-					case '/': // Prefix: "/cars"
-						if l := len("/cars"); len(elem) >= l && elem[0:l] == "/cars" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf: ListCarCars
-							s.handleListCarCarsRequest([1]string{
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteCarRequest([1]string{
 								args[0],
 							}, w, r)
-
-							return
+						case "GET":
+							s.handleReadCarRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateCarRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
 						}
+
+						return
 					}
 				}
 			case 'd': // Prefix: "db-health"
@@ -408,8 +216,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf: DBHealth
-					s.handleDBHealthRequest([0]string{}, w, r)
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleDBHealthRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
 
 					return
 				}
@@ -421,7 +234,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListGroupRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListGroupRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateGroupRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -443,9 +263,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						s.handleReadGroupRequest([1]string{
-							args[0],
-						}, w, r)
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteGroupRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadGroupRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateGroupRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
 
 						return
 					}
@@ -458,10 +291,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						if len(elem) == 0 {
-							// Leaf: ListGroupUsers
-							s.handleListGroupUsersRequest([1]string{
-								args[0],
-							}, w, r)
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleListGroupUsersRequest([1]string{
+									args[0],
+								}, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
 
 							return
 						}
@@ -475,9 +313,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListPokemonRequest([0]string{}, w, r)
-
-					return
+					break
 				}
 				switch elem[0] {
 				case 'e': // Prefix: "ets"
@@ -488,7 +324,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					if len(elem) == 0 {
-						s.handleListPetRequest([0]string{}, w, r)
+						switch r.Method {
+						case "GET":
+							s.handleListPetRequest([0]string{}, w, r)
+						case "POST":
+							s.handleCreatePetRequest([0]string{}, w, r)
+						default:
+							s.notAllowed(w, r, "GET,POST")
+						}
 
 						return
 					}
@@ -506,10 +349,23 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						elem = ""
 
 						if len(elem) == 0 {
-							// Leaf: ReadPet
-							s.handleReadPetRequest([1]string{
-								args[0],
-							}, w, r)
+							// Leaf node.
+							switch r.Method {
+							case "DELETE":
+								s.handleDeletePetRequest([1]string{
+									args[0],
+								}, w, r)
+							case "GET":
+								s.handleReadPetRequest([1]string{
+									args[0],
+								}, w, r)
+							case "PATCH":
+								s.handleUpdatePetRequest([1]string{
+									args[0],
+								}, w, r)
+							default:
+								s.notAllowed(w, r, "DELETE,GET,PATCH")
+							}
 
 							return
 						}
@@ -522,7 +378,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					if len(elem) == 0 {
-						s.handleListPokemonRequest([0]string{}, w, r)
+						switch r.Method {
+						case "GET":
+							s.handleListPokemonRequest([0]string{}, w, r)
+						case "POST":
+							s.handleCreatePokemonRequest([0]string{}, w, r)
+						default:
+							s.notAllowed(w, r, "GET,POST")
+						}
 
 						return
 					}
@@ -544,9 +407,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						elem = elem[idx:]
 
 						if len(elem) == 0 {
-							s.handleReadPokemonRequest([1]string{
-								args[0],
-							}, w, r)
+							switch r.Method {
+							case "DELETE":
+								s.handleDeletePokemonRequest([1]string{
+									args[0],
+								}, w, r)
+							case "GET":
+								s.handleReadPokemonRequest([1]string{
+									args[0],
+								}, w, r)
+							case "PATCH":
+								s.handleUpdatePokemonRequest([1]string{
+									args[0],
+								}, w, r)
+							default:
+								s.notAllowed(w, r, "DELETE,GET,PATCH")
+							}
 
 							return
 						}
@@ -559,11 +435,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								s.handleListPokemonOpponentsRequest([1]string{
-									args[0],
-								}, w, r)
-
-								return
+								break
 							}
 							switch elem[0] {
 							case 'f': // Prefix: "fights"
@@ -574,10 +446,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}
 
 								if len(elem) == 0 {
-									// Leaf: ListPokemonFights
-									s.handleListPokemonFightsRequest([1]string{
-										args[0],
-									}, w, r)
+									// Leaf node.
+									switch r.Method {
+									case "GET":
+										s.handleListPokemonFightsRequest([1]string{
+											args[0],
+										}, w, r)
+									default:
+										s.notAllowed(w, r, "GET")
+									}
 
 									return
 								}
@@ -589,10 +466,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}
 
 								if len(elem) == 0 {
-									// Leaf: ListPokemonOpponents
-									s.handleListPokemonOpponentsRequest([1]string{
-										args[0],
-									}, w, r)
+									// Leaf node.
+									switch r.Method {
+									case "GET":
+										s.handleListPokemonOpponentsRequest([1]string{
+											args[0],
+										}, w, r)
+									default:
+										s.notAllowed(w, r, "GET")
+									}
 
 									return
 								}
@@ -608,7 +490,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListUserRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListUserRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateUserRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -630,9 +519,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						s.handleReadUserRequest([1]string{
-							args[0],
-						}, w, r)
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteUserRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadUserRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateUserRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
 
 						return
 					}
@@ -645,11 +547,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						if len(elem) == 0 {
-							s.handleListUserGroupsRequest([1]string{
-								args[0],
-							}, w, r)
-
-							return
+							break
 						}
 						switch elem[0] {
 						case 'c': // Prefix: "cars"
@@ -660,10 +558,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListUserCars
-								s.handleListUserCarsRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListUserCarsRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
@@ -675,285 +578,20 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListUserGroups
-								s.handleListUserGroupsRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListUserGroupsRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
 						}
 					}
-				}
-			}
-		}
-	case "PATCH":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				s.handleUpdateCarRequest([1]string{
-					args[0],
-				}, w, r)
-
-				return
-			}
-			switch elem[0] {
-			case 'b': // Prefix: "battles/"
-				if l := len("battles/"); len(elem) >= l && elem[0:l] == "battles/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateBattle
-					s.handleUpdateBattleRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'c': // Prefix: "cars/"
-				if l := len("cars/"); len(elem) >= l && elem[0:l] == "cars/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateCar
-					s.handleUpdateCarRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'g': // Prefix: "groups/"
-				if l := len("groups/"); len(elem) >= l && elem[0:l] == "groups/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateGroup
-					s.handleUpdateGroupRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'p': // Prefix: "p"
-				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					s.handleUpdatePokemonRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-				switch elem[0] {
-				case 'e': // Prefix: "ets/"
-					if l := len("ets/"); len(elem) >= l && elem[0:l] == "ets/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: UpdatePet
-						s.handleUpdatePetRequest([1]string{
-							args[0],
-						}, w, r)
-
-						return
-					}
-				case 'o': // Prefix: "okemons/"
-					if l := len("okemons/"); len(elem) >= l && elem[0:l] == "okemons/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: UpdatePokemon
-						s.handleUpdatePokemonRequest([1]string{
-							args[0],
-						}, w, r)
-
-						return
-					}
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateUser
-					s.handleUpdateUserRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			}
-		}
-	case "POST":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				s.handleCreateCarRequest([0]string{}, w, r)
-
-				return
-			}
-			switch elem[0] {
-			case 'b': // Prefix: "battles"
-				if l := len("battles"); len(elem) >= l && elem[0:l] == "battles" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateBattle
-					s.handleCreateBattleRequest([0]string{}, w, r)
-
-					return
-				}
-			case 'c': // Prefix: "cars"
-				if l := len("cars"); len(elem) >= l && elem[0:l] == "cars" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateCar
-					s.handleCreateCarRequest([0]string{}, w, r)
-
-					return
-				}
-			case 'g': // Prefix: "groups"
-				if l := len("groups"); len(elem) >= l && elem[0:l] == "groups" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateGroup
-					s.handleCreateGroupRequest([0]string{}, w, r)
-
-					return
-				}
-			case 'p': // Prefix: "p"
-				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					s.handleCreatePokemonRequest([0]string{}, w, r)
-
-					return
-				}
-				switch elem[0] {
-				case 'e': // Prefix: "ets"
-					if l := len("ets"); len(elem) >= l && elem[0:l] == "ets" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf: CreatePet
-						s.handleCreatePetRequest([0]string{}, w, r)
-
-						return
-					}
-				case 'o': // Prefix: "okemons"
-					if l := len("okemons"); len(elem) >= l && elem[0:l] == "okemons" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf: CreatePokemon
-						s.handleCreatePokemonRequest([0]string{}, w, r)
-
-						return
-					}
-				}
-			case 'u': // Prefix: "users"
-				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateUser
-					s.handleCreateUserRequest([0]string{}, w, r)
-
-					return
 				}
 			}
 		}
@@ -963,14 +601,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Route is route object.
 type Route struct {
-	name  string
-	count int
-	args  [1]string
+	name        string
+	operationID string
+	count       int
+	args        [1]string
+}
+
+// Name returns ogen operation name.
+//
+// It is guaranteed to be unique and not empty.
+func (r Route) Name() string {
+	return r.name
 }
 
 // OperationID returns OpenAPI operationId.
 func (r Route) OperationID() string {
-	return r.name
+	return r.operationID
 }
 
 // Args returns parsed arguments.
@@ -985,10 +631,13 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 		elem = path
 	)
 	r.args = args
+	if elem == "" {
+		return r, false
+	}
 
 	// Static code generated router with unwrapped path search.
-	switch method {
-	case "DELETE":
+	switch {
+	default:
 		if len(elem) == 0 {
 			break
 		}
@@ -1001,160 +650,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 			}
 
 			if len(elem) == 0 {
-				r.name = "DeleteCar"
-				r.args = args
-				r.count = 0
-				return r, true
-			}
-			switch elem[0] {
-			case 'b': // Prefix: "battles/"
-				if l := len("battles/"); len(elem) >= l && elem[0:l] == "battles/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteBattle
-					r.name = "DeleteBattle"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'c': // Prefix: "cars/"
-				if l := len("cars/"); len(elem) >= l && elem[0:l] == "cars/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteCar
-					r.name = "DeleteCar"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'g': // Prefix: "groups/"
-				if l := len("groups/"); len(elem) >= l && elem[0:l] == "groups/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteGroup
-					r.name = "DeleteGroup"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'p': // Prefix: "p"
-				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					r.name = "DeletePokemon"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-				switch elem[0] {
-				case 'e': // Prefix: "ets/"
-					if l := len("ets/"); len(elem) >= l && elem[0:l] == "ets/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: DeletePet
-						r.name = "DeletePet"
-						r.args = args
-						r.count = 1
-						return r, true
-					}
-				case 'o': // Prefix: "okemons/"
-					if l := len("okemons/"); len(elem) >= l && elem[0:l] == "okemons/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: DeletePokemon
-						r.name = "DeletePokemon"
-						r.args = args
-						r.count = 1
-						return r, true
-					}
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteUser
-					r.name = "DeleteUser"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			}
-		}
-	case "GET":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
 				break
-			}
-
-			if len(elem) == 0 {
-				r.name = "ListBattle"
-				r.args = args
-				r.count = 0
-				return r, true
 			}
 			switch elem[0] {
 			case 'b': // Prefix: "battles"
@@ -1165,10 +661,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListBattle"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListBattle"
+						r.operationID = "listBattle"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateBattle"
+						r.operationID = "createBattle"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -1188,10 +696,28 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						r.name = "ReadBattle"
-						r.args = args
-						r.count = 1
-						return r, true
+						switch method {
+						case "DELETE":
+							r.name = "DeleteBattle"
+							r.operationID = "deleteBattle"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = "ReadBattle"
+							r.operationID = "readBattle"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = "UpdateBattle"
+							r.operationID = "updateBattle"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/"
@@ -1202,10 +728,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						}
 
 						if len(elem) == 0 {
-							r.name = "ReadBattleOponent"
-							r.args = args
-							r.count = 1
-							return r, true
+							break
 						}
 						switch elem[0] {
 						case 'c': // Prefix: "contender"
@@ -1216,11 +739,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadBattleContender
-								r.name = "ReadBattleContender"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ReadBattleContender
+									r.name = "ReadBattleContender"
+									r.operationID = "readBattleContender"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						case 'o': // Prefix: "oponent"
 							if l := len("oponent"); len(elem) >= l && elem[0:l] == "oponent" {
@@ -1230,11 +759,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadBattleOponent
-								r.name = "ReadBattleOponent"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ReadBattleOponent
+									r.name = "ReadBattleOponent"
+									r.operationID = "readBattleOponent"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						}
 					}
@@ -1247,10 +782,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListCar"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListCar"
+						r.operationID = "listCar"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateCar"
+						r.operationID = "createCar"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -1261,34 +808,35 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					}
 
 					// Param: "id"
-					// Match until "/"
-					idx := strings.IndexByte(elem, '/')
-					if idx < 0 {
-						idx = len(elem)
-					}
-					args[0] = elem[:idx]
-					elem = elem[idx:]
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
 
 					if len(elem) == 0 {
-						r.name = "ReadCar"
-						r.args = args
-						r.count = 1
-						return r, true
-					}
-					switch elem[0] {
-					case '/': // Prefix: "/cars"
-						if l := len("/cars"); len(elem) >= l && elem[0:l] == "/cars" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf: ListCarCars
-							r.name = "ListCarCars"
+						switch method {
+						case "DELETE":
+							// Leaf: DeleteCar
+							r.name = "DeleteCar"
+							r.operationID = "deleteCar"
 							r.args = args
 							r.count = 1
 							return r, true
+						case "GET":
+							// Leaf: ReadCar
+							r.name = "ReadCar"
+							r.operationID = "readCar"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							// Leaf: UpdateCar
+							r.name = "UpdateCar"
+							r.operationID = "updateCar"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
 						}
 					}
 				}
@@ -1300,11 +848,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf: DBHealth
-					r.name = "DBHealth"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						// Leaf: DBHealth
+						r.name = "DBHealth"
+						r.operationID = "DBHealth"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 			case 'g': // Prefix: "groups"
 				if l := len("groups"); len(elem) >= l && elem[0:l] == "groups" {
@@ -1314,10 +868,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListGroup"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListGroup"
+						r.operationID = "listGroup"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateGroup"
+						r.operationID = "createGroup"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -1337,10 +903,28 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						r.name = "ReadGroup"
-						r.args = args
-						r.count = 1
-						return r, true
+						switch method {
+						case "DELETE":
+							r.name = "DeleteGroup"
+							r.operationID = "deleteGroup"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = "ReadGroup"
+							r.operationID = "readGroup"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = "UpdateGroup"
+							r.operationID = "updateGroup"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/users"
@@ -1351,11 +935,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						}
 
 						if len(elem) == 0 {
-							// Leaf: ListGroupUsers
-							r.name = "ListGroupUsers"
-							r.args = args
-							r.count = 1
-							return r, true
+							switch method {
+							case "GET":
+								// Leaf: ListGroupUsers
+								r.name = "ListGroupUsers"
+								r.operationID = "listGroupUsers"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 					}
 				}
@@ -1367,10 +957,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListPokemon"
-					r.args = args
-					r.count = 0
-					return r, true
+					break
 				}
 				switch elem[0] {
 				case 'e': // Prefix: "ets"
@@ -1381,10 +968,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					}
 
 					if len(elem) == 0 {
-						r.name = "ListPet"
-						r.args = args
-						r.count = 0
-						return r, true
+						switch method {
+						case "GET":
+							r.name = "ListPet"
+							r.operationID = "listPet"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = "CreatePet"
+							r.operationID = "createPet"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/"
@@ -1400,11 +999,31 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						elem = ""
 
 						if len(elem) == 0 {
-							// Leaf: ReadPet
-							r.name = "ReadPet"
-							r.args = args
-							r.count = 1
-							return r, true
+							switch method {
+							case "DELETE":
+								// Leaf: DeletePet
+								r.name = "DeletePet"
+								r.operationID = "deletePet"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "GET":
+								// Leaf: ReadPet
+								r.name = "ReadPet"
+								r.operationID = "readPet"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PATCH":
+								// Leaf: UpdatePet
+								r.name = "UpdatePet"
+								r.operationID = "updatePet"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 					}
 				case 'o': // Prefix: "okemons"
@@ -1415,10 +1034,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					}
 
 					if len(elem) == 0 {
-						r.name = "ListPokemon"
-						r.args = args
-						r.count = 0
-						return r, true
+						switch method {
+						case "GET":
+							r.name = "ListPokemon"
+							r.operationID = "listPokemon"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = "CreatePokemon"
+							r.operationID = "createPokemon"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/"
@@ -1438,10 +1069,28 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						elem = elem[idx:]
 
 						if len(elem) == 0 {
-							r.name = "ReadPokemon"
-							r.args = args
-							r.count = 1
-							return r, true
+							switch method {
+							case "DELETE":
+								r.name = "DeletePokemon"
+								r.operationID = "deletePokemon"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "GET":
+								r.name = "ReadPokemon"
+								r.operationID = "readPokemon"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PATCH":
+								r.name = "UpdatePokemon"
+								r.operationID = "updatePokemon"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 						switch elem[0] {
 						case '/': // Prefix: "/"
@@ -1452,10 +1101,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								r.name = "ListPokemonOpponents"
-								r.args = args
-								r.count = 1
-								return r, true
+								break
 							}
 							switch elem[0] {
 							case 'f': // Prefix: "fights"
@@ -1466,11 +1112,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 								}
 
 								if len(elem) == 0 {
-									// Leaf: ListPokemonFights
-									r.name = "ListPokemonFights"
-									r.args = args
-									r.count = 1
-									return r, true
+									switch method {
+									case "GET":
+										// Leaf: ListPokemonFights
+										r.name = "ListPokemonFights"
+										r.operationID = "listPokemonFights"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
 								}
 							case 'o': // Prefix: "opponents"
 								if l := len("opponents"); len(elem) >= l && elem[0:l] == "opponents" {
@@ -1480,11 +1132,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 								}
 
 								if len(elem) == 0 {
-									// Leaf: ListPokemonOpponents
-									r.name = "ListPokemonOpponents"
-									r.args = args
-									r.count = 1
-									return r, true
+									switch method {
+									case "GET":
+										// Leaf: ListPokemonOpponents
+										r.name = "ListPokemonOpponents"
+										r.operationID = "listPokemonOpponents"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
 								}
 							}
 						}
@@ -1498,10 +1156,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListUser"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListUser"
+						r.operationID = "listUser"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateUser"
+						r.operationID = "createUser"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -1521,10 +1191,28 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						r.name = "ReadUser"
-						r.args = args
-						r.count = 1
-						return r, true
+						switch method {
+						case "DELETE":
+							r.name = "DeleteUser"
+							r.operationID = "deleteUser"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = "ReadUser"
+							r.operationID = "readUser"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = "UpdateUser"
+							r.operationID = "updateUser"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/"
@@ -1535,10 +1223,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						}
 
 						if len(elem) == 0 {
-							r.name = "ListUserGroups"
-							r.args = args
-							r.count = 1
-							return r, true
+							break
 						}
 						switch elem[0] {
 						case 'c': // Prefix: "cars"
@@ -1549,11 +1234,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListUserCars
-								r.name = "ListUserCars"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ListUserCars
+									r.name = "ListUserCars"
+									r.operationID = "listUserCars"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						case 'g': // Prefix: "groups"
 							if l := len("groups"); len(elem) >= l && elem[0:l] == "groups" {
@@ -1563,284 +1254,20 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListUserGroups
-								r.name = "ListUserGroups"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ListUserGroups
+									r.name = "ListUserGroups"
+									r.operationID = "listUserGroups"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						}
 					}
-				}
-			}
-		}
-	case "PATCH":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				r.name = "UpdateCar"
-				r.args = args
-				r.count = 0
-				return r, true
-			}
-			switch elem[0] {
-			case 'b': // Prefix: "battles/"
-				if l := len("battles/"); len(elem) >= l && elem[0:l] == "battles/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateBattle
-					r.name = "UpdateBattle"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'c': // Prefix: "cars/"
-				if l := len("cars/"); len(elem) >= l && elem[0:l] == "cars/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateCar
-					r.name = "UpdateCar"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'g': // Prefix: "groups/"
-				if l := len("groups/"); len(elem) >= l && elem[0:l] == "groups/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateGroup
-					r.name = "UpdateGroup"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'p': // Prefix: "p"
-				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					r.name = "UpdatePokemon"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-				switch elem[0] {
-				case 'e': // Prefix: "ets/"
-					if l := len("ets/"); len(elem) >= l && elem[0:l] == "ets/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: UpdatePet
-						r.name = "UpdatePet"
-						r.args = args
-						r.count = 1
-						return r, true
-					}
-				case 'o': // Prefix: "okemons/"
-					if l := len("okemons/"); len(elem) >= l && elem[0:l] == "okemons/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf: UpdatePokemon
-						r.name = "UpdatePokemon"
-						r.args = args
-						r.count = 1
-						return r, true
-					}
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateUser
-					r.name = "UpdateUser"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			}
-		}
-	case "POST":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				r.name = "CreateCar"
-				r.args = args
-				r.count = 0
-				return r, true
-			}
-			switch elem[0] {
-			case 'b': // Prefix: "battles"
-				if l := len("battles"); len(elem) >= l && elem[0:l] == "battles" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateBattle
-					r.name = "CreateBattle"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-			case 'c': // Prefix: "cars"
-				if l := len("cars"); len(elem) >= l && elem[0:l] == "cars" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateCar
-					r.name = "CreateCar"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-			case 'g': // Prefix: "groups"
-				if l := len("groups"); len(elem) >= l && elem[0:l] == "groups" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateGroup
-					r.name = "CreateGroup"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-			case 'p': // Prefix: "p"
-				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					r.name = "CreatePokemon"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-				switch elem[0] {
-				case 'e': // Prefix: "ets"
-					if l := len("ets"); len(elem) >= l && elem[0:l] == "ets" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf: CreatePet
-						r.name = "CreatePet"
-						r.args = args
-						r.count = 0
-						return r, true
-					}
-				case 'o': // Prefix: "okemons"
-					if l := len("okemons"); len(elem) >= l && elem[0:l] == "okemons" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf: CreatePokemon
-						r.name = "CreatePokemon"
-						r.args = args
-						r.count = 0
-						return r, true
-					}
-				}
-			case 'u': // Prefix: "users"
-				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateUser
-					r.name = "CreateUser"
-					r.args = args
-					r.count = 0
-					return r, true
 				}
 			}
 		}

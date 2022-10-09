@@ -273,7 +273,6 @@ func (h *OgentHandler) CreateCar(ctx context.Context, req CreateCarReq) (CreateC
 	b.SetModel(req.Model)
 	b.SetRegisteredAt(req.RegisteredAt)
 	// Add all edges.
-	b.AddCarIDs(req.Cars...)
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -342,7 +341,6 @@ func (h *OgentHandler) UpdateCar(ctx context.Context, req UpdateCarReq, params U
 		b.SetRegisteredAt(v)
 	}
 	// Add all edges.
-	b.ClearCars().AddCarIDs(req.Cars...)
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -435,42 +433,6 @@ func (h *OgentHandler) ListCar(ctx context.Context, params ListCarParams) (ListC
 	}
 	r := NewCarLists(es)
 	return (*ListCarOKApplicationJSON)(&r), nil
-}
-
-// ListCarCars handles GET /cars/{id}/cars requests.
-func (h *OgentHandler) ListCarCars(ctx context.Context, params ListCarCarsParams) (ListCarCarsRes, error) {
-	q := h.client.Car.Query().Where(car.IDEQ(params.ID)).QueryCars()
-	page := 1
-	if v, ok := params.Page.Get(); ok {
-		page = v
-	}
-	itemsPerPage := 30
-	if v, ok := params.ItemsPerPage.Get(); ok {
-		itemsPerPage = v
-	}
-	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
-	es, err := q.All(ctx)
-	if err != nil {
-		switch {
-		case ent.IsNotFound(err):
-			return &R404{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: rawError(err),
-			}, nil
-		case ent.IsNotSingular(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: rawError(err),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
-	}
-	r := NewCarCarsLists(es)
-	return (*ListCarCarsOKApplicationJSON)(&r), nil
 }
 
 // CreateGroup handles POST /groups requests.

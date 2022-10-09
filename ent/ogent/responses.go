@@ -306,35 +306,6 @@ func (c *CarUpdate) Elem() CarUpdate {
 	return *c
 }
 
-func NewCarCarsList(e *ent.Car) *CarCarsList {
-	if e == nil {
-		return nil
-	}
-	var ret CarCarsList
-	ret.ID = e.ID
-	ret.Model = e.Model
-	ret.RegisteredAt = e.RegisteredAt
-	return &ret
-}
-
-func NewCarCarsLists(es []*ent.Car) []CarCarsList {
-	if len(es) == 0 {
-		return nil
-	}
-	r := make([]CarCarsList, len(es))
-	for i, e := range es {
-		r[i] = NewCarCarsList(e).Elem()
-	}
-	return r
-}
-
-func (c *CarCarsList) Elem() CarCarsList {
-	if c == nil {
-		return CarCarsList{}
-	}
-	return *c
-}
-
 func NewGroupCreate(e *ent.Group) *GroupCreate {
 	if e == nil {
 		return nil

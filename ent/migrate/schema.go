@@ -109,31 +109,6 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
-	// CarCarsColumns holds the columns for the "car_cars" table.
-	CarCarsColumns = []*schema.Column{
-		{Name: "car_id", Type: field.TypeInt},
-		{Name: "car_id", Type: field.TypeInt},
-	}
-	// CarCarsTable holds the schema information for the "car_cars" table.
-	CarCarsTable = &schema.Table{
-		Name:       "car_cars",
-		Columns:    CarCarsColumns,
-		PrimaryKey: []*schema.Column{CarCarsColumns[0], CarCarsColumns[1], CarCarsColumns[0], CarCarsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "car_cars_car_id",
-				Columns:    []*schema.Column{CarCarsColumns[0], CarCarsColumns[1]},
-				RefColumns: []*schema.Column{CarsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "car_cars_car_id",
-				Columns:    []*schema.Column{CarCarsColumns[0], CarCarsColumns[1]},
-				RefColumns: []*schema.Column{CarsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// GroupUsersColumns holds the columns for the "group_users" table.
 	GroupUsersColumns = []*schema.Column{
 		{Name: "group_id", Type: field.TypeInt},
@@ -167,7 +142,6 @@ var (
 		PetsTable,
 		PokemonsTable,
 		UsersTable,
-		CarCarsTable,
 		GroupUsersTable,
 	}
 )
@@ -176,8 +150,6 @@ func init() {
 	BattlesTable.ForeignKeys[0].RefTable = PokemonsTable
 	BattlesTable.ForeignKeys[1].RefTable = PokemonsTable
 	CarsTable.ForeignKeys[0].RefTable = UsersTable
-	CarCarsTable.ForeignKeys[0].RefTable = CarsTable
-	CarCarsTable.ForeignKeys[1].RefTable = CarsTable
 	GroupUsersTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupUsersTable.ForeignKeys[1].RefTable = UsersTable
 }
