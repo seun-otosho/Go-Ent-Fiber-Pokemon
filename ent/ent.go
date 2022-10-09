@@ -6,6 +6,7 @@ import (
 	"GoEntFiberPokeman/ent/battle"
 	"GoEntFiberPokeman/ent/car"
 	"GoEntFiberPokeman/ent/group"
+	"GoEntFiberPokeman/ent/pet"
 	"GoEntFiberPokeman/ent/pokemon"
 	"GoEntFiberPokeman/ent/user"
 	"context"
@@ -38,6 +39,7 @@ func columnChecker(table string) func(string) error {
 		battle.Table:  battle.ValidColumn,
 		car.Table:     car.ValidColumn,
 		group.Table:   group.ValidColumn,
+		pet.Table:     pet.ValidColumn,
 		pokemon.Table: pokemon.ValidColumn,
 		user.Table:    user.ValidColumn,
 	}

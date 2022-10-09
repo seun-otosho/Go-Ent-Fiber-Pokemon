@@ -155,7 +155,7 @@ func CreateGraph(ctx context.Context, client *ent.Client) error {
 		SetModel("Tesla").
 		SetRegisteredAt(time.Now()).
 		// Attach this car to Ariel.
-		SetOwner(a8m).
+		//SetOwner(a8m).
 		Exec(ctx)
 	if err != nil {
 		return err
@@ -165,7 +165,7 @@ func CreateGraph(ctx context.Context, client *ent.Client) error {
 		SetModel("Mazda").
 		SetRegisteredAt(time.Now()).
 		// Attach this car to Ariel.
-		SetOwner(a8m).
+		//SetOwner(a8m).
 		Exec(ctx)
 	if err != nil {
 		return err
@@ -175,7 +175,7 @@ func CreateGraph(ctx context.Context, client *ent.Client) error {
 		SetModel("Ford").
 		SetRegisteredAt(time.Now()).
 		// Attach this graph to Neta.
-		SetOwner(neta).
+		//SetOwner(neta).
 		Exec(ctx)
 	if err != nil {
 		return err

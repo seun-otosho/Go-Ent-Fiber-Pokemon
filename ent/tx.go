@@ -18,6 +18,8 @@ type Tx struct {
 	Car *CarClient
 	// Group is the client for interacting with the Group builders.
 	Group *GroupClient
+	// Pet is the client for interacting with the Pet builders.
+	Pet *PetClient
 	// Pokemon is the client for interacting with the Pokemon builders.
 	Pokemon *PokemonClient
 	// User is the client for interacting with the User builders.
@@ -160,6 +162,7 @@ func (tx *Tx) init() {
 	tx.Battle = NewBattleClient(tx.config)
 	tx.Car = NewCarClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)
+	tx.Pet = NewPetClient(tx.config)
 	tx.Pokemon = NewPokemonClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }

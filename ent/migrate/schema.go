@@ -69,6 +69,18 @@ var (
 		Columns:    GroupsColumns,
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 	}
+	// PetsColumns holds the columns for the "pets" table.
+	PetsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "age", Type: field.TypeInt},
+	}
+	// PetsTable holds the schema information for the "pets" table.
+	PetsTable = &schema.Table{
+		Name:       "pets",
+		Columns:    PetsColumns,
+		PrimaryKey: []*schema.Column{PetsColumns[0]},
+	}
 	// PokemonsColumns holds the columns for the "pokemons" table.
 	PokemonsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -152,6 +164,7 @@ var (
 		BattlesTable,
 		CarsTable,
 		GroupsTable,
+		PetsTable,
 		PokemonsTable,
 		UsersTable,
 		CarCarsTable,
