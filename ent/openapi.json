@@ -1,22 +1,18 @@
 {
+  "openapi": "3.0.3",
   "info": {
     "title": "Ent Schema API",
     "description": "This is an auto generated API description made out of an Ent schema definition",
-    "termsOfService": "",
-    "contact": {},
-    "license": {
-      "name": ""
-    },
-    "version": "0.0.0"
+    "version": "0.1.0"
   },
   "paths": {
     "/battles": {
       "get": {
-        "summary": "List Battles",
-        "description": "List Battles.",
         "tags": [
           "Battle"
         ],
+        "summary": "List Battles",
+        "description": "List Battles.",
         "operationId": "listBattle",
         "parameters": [
           {
@@ -24,8 +20,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -33,8 +28,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -46,7 +40,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Battle2279316362View"
+                    "$ref": "#/components/schemas/BattleList"
                   }
                 }
               }
@@ -58,17 +52,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "post": {
-        "summary": "Create a new Battle",
-        "description": "Creates a new Battle and persists it to storage.",
         "tags": [
           "Battle"
         ],
+        "summary": "Create a new Battle",
+        "description": "Creates a new Battle and persists it to storage.",
         "operationId": "createBattle",
         "requestBody": {
           "description": "Battle to create",
@@ -76,35 +73,34 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "created_at",
-                  "result",
-                  "updated_at"
-                ],
                 "properties": {
-                  "contender": {
-                    "type": "integer",
-                    "format": "int32"
+                  "result": {
+                    "type": "string"
                   },
                   "created_at": {
                     "type": "string",
                     "format": "date-time"
                   },
-                  "oponent": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "result": {
-                    "type": "string"
-                  },
                   "updated_at": {
                     "type": "string",
                     "format": "date-time"
+                  },
+                  "contender": {
+                    "type": "integer"
+                  },
+                  "oponent": {
+                    "type": "integer"
                   }
-                }
+                },
+                "required": [
+                  "result",
+                  "created_at",
+                  "updated_at"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -112,13 +108,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Battle2279316362View"
+                  "$ref": "#/components/schemas/BattleCreate"
                 }
               }
             }
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -128,22 +127,21 @@
     },
     "/battles/{id}": {
       "get": {
-        "summary": "Find a Battle by ID",
-        "description": "Finds the Battle with the requested ID and returns it.",
         "tags": [
           "Battle"
         ],
+        "summary": "Find a Battle by ID",
+        "description": "Finds the Battle with the requested ID and returns it.",
         "operationId": "readBattle",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -152,7 +150,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Battle2279316362View"
+                  "$ref": "#/components/schemas/BattleRead"
                 }
               }
             }
@@ -163,28 +161,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "delete": {
-        "summary": "Deletes a Battle by ID",
-        "description": "Deletes the Battle with the requested ID.",
         "tags": [
           "Battle"
         ],
+        "summary": "Deletes a Battle by ID",
+        "description": "Deletes the Battle with the requested ID.",
         "operationId": "deleteBattle",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Battle to delete",
-            "required": true,
+            "description": "ID of the Battle",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -197,28 +197,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "patch": {
-        "summary": "Updates a Battle",
-        "description": "Updates a Battle and persists changes to storage.",
         "tags": [
           "Battle"
         ],
+        "summary": "Updates a Battle",
+        "description": "Updates a Battle and persists changes to storage.",
         "operationId": "updateBattle",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Battle to update",
-            "required": true,
+            "description": "ID of the Battle",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -227,30 +229,25 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "result",
-                  "updated_at"
-                ],
                 "properties": {
-                  "contender": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "oponent": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
                   "result": {
                     "type": "string"
                   },
                   "updated_at": {
                     "type": "string",
                     "format": "date-time"
+                  },
+                  "contender": {
+                    "type": "integer"
+                  },
+                  "oponent": {
+                    "type": "integer"
                   }
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -258,7 +255,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Battle2279316362View"
+                  "$ref": "#/components/schemas/BattleUpdate"
                 }
               }
             }
@@ -268,6 +265,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -277,22 +277,21 @@
     },
     "/battles/{id}/contender": {
       "get": {
-        "summary": "Find the attached Pokemon",
-        "description": "Find the attached Pokemon of the Battle with the given ID",
         "tags": [
           "Battle"
         ],
+        "summary": "Find the attached Pokemon",
+        "description": "Find the attached Pokemon of the Battle with the given ID",
         "operationId": "readBattleContender",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -301,7 +300,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pokemon2727375384View"
+                  "$ref": "#/components/schemas/Battle_ContenderRead"
                 }
               }
             }
@@ -311,6 +310,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -320,22 +322,21 @@
     },
     "/battles/{id}/oponent": {
       "get": {
-        "summary": "Find the attached Pokemon",
-        "description": "Find the attached Pokemon of the Battle with the given ID",
         "tags": [
           "Battle"
         ],
+        "summary": "Find the attached Pokemon",
+        "description": "Find the attached Pokemon of the Battle with the given ID",
         "operationId": "readBattleOponent",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the Battle",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -344,7 +345,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pokemon2727375384View"
+                  "$ref": "#/components/schemas/Battle_OponentRead"
                 }
               }
             }
@@ -355,6 +356,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -363,11 +367,11 @@
     },
     "/cars": {
       "get": {
-        "summary": "List Cars",
-        "description": "List Cars.",
         "tags": [
           "Car"
         ],
+        "summary": "List Cars",
+        "description": "List Cars.",
         "operationId": "listCar",
         "parameters": [
           {
@@ -375,8 +379,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -384,8 +387,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -397,7 +399,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Car2526155363View"
+                    "$ref": "#/components/schemas/CarList"
                   }
                 }
               }
@@ -409,17 +411,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "post": {
-        "summary": "Create a new Car",
-        "description": "Creates a new Car and persists it to storage.",
         "tags": [
           "Car"
         ],
+        "summary": "Create a new Car",
+        "description": "Creates a new Car and persists it to storage.",
         "operationId": "createCar",
         "requestBody": {
           "description": "Car to create",
@@ -427,29 +432,29 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "model",
-                  "registered_at"
-                ],
                 "properties": {
-                  "cars": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  },
                   "model": {
                     "type": "string"
                   },
                   "registered_at": {
                     "type": "string",
                     "format": "date-time"
+                  },
+                  "cars": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
                   }
-                }
+                },
+                "required": [
+                  "model",
+                  "registered_at"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -457,13 +462,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Car2526155363View"
+                  "$ref": "#/components/schemas/CarCreate"
                 }
               }
             }
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -473,22 +481,21 @@
     },
     "/cars/{id}": {
       "get": {
-        "summary": "Find a Car by ID",
-        "description": "Finds the Car with the requested ID and returns it.",
         "tags": [
           "Car"
         ],
+        "summary": "Find a Car by ID",
+        "description": "Finds the Car with the requested ID and returns it.",
         "operationId": "readCar",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the Car",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -497,7 +504,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Car2526155363View"
+                  "$ref": "#/components/schemas/CarRead"
                 }
               }
             }
@@ -508,28 +515,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "delete": {
-        "summary": "Deletes a Car by ID",
-        "description": "Deletes the Car with the requested ID.",
         "tags": [
           "Car"
         ],
+        "summary": "Deletes a Car by ID",
+        "description": "Deletes the Car with the requested ID.",
         "operationId": "deleteCar",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Car to delete",
-            "required": true,
+            "description": "ID of the Car",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -542,28 +551,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "patch": {
-        "summary": "Updates a Car",
-        "description": "Updates a Car and persists changes to storage.",
         "tags": [
           "Car"
         ],
+        "summary": "Updates a Car",
+        "description": "Updates a Car and persists changes to storage.",
         "operationId": "updateCar",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Car to update",
-            "required": true,
+            "description": "ID of the Car",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -572,29 +583,25 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "model",
-                  "registered_at"
-                ],
                 "properties": {
-                  "cars": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  },
                   "model": {
                     "type": "string"
                   },
                   "registered_at": {
                     "type": "string",
                     "format": "date-time"
+                  },
+                  "cars": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
                   }
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -602,7 +609,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Car2526155363View"
+                  "$ref": "#/components/schemas/CarUpdate"
                 }
               }
             }
@@ -612,6 +619,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -621,20 +631,28 @@
     },
     "/cars/{id}/cars": {
       "get": {
-        "summary": "Find the attached Cars",
-        "description": "Find the attached Cars of the Car with the given ID",
         "tags": [
           "Car"
         ],
+        "summary": "List attached Cars",
+        "description": "List attached Cars.",
         "operationId": "listCarCars",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Car",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
           {
             "name": "page",
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -642,30 +660,19 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Car",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Cars attached to Car with requested ID was found",
+            "description": "result Cars list",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Car2526155363View"
+                    "$ref": "#/components/schemas/Car_CarsList"
                   }
                 }
               }
@@ -677,19 +684,37 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       }
     },
+    "/db-health": {
+      "description": "Check the servers DB status",
+      "get": {
+        "summary": "Ping the database and report",
+        "operationId": "DBHealth",
+        "responses": {
+          "204": {
+            "description": "DB is reachable"
+          },
+          "503": {
+            "description": "DB is not reachable"
+          }
+        }
+      }
+    },
     "/groups": {
       "get": {
-        "summary": "List Groups",
-        "description": "List Groups.",
         "tags": [
           "Group"
         ],
+        "summary": "List Groups",
+        "description": "List Groups.",
         "operationId": "listGroup",
         "parameters": [
           {
@@ -697,8 +722,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -706,8 +730,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -719,7 +742,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Group2834184090View"
+                    "$ref": "#/components/schemas/GroupList"
                   }
                 }
               }
@@ -731,17 +754,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "post": {
-        "summary": "Create a new Group",
-        "description": "Creates a new Group and persists it to storage.",
         "tags": [
           "Group"
         ],
+        "summary": "Create a new Group",
+        "description": "Creates a new Group and persists it to storage.",
         "operationId": "createGroup",
         "requestBody": {
           "description": "Group to create",
@@ -749,9 +775,6 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name"
-                ],
                 "properties": {
                   "name": {
                     "type": "string"
@@ -759,14 +782,17 @@
                   "users": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
-                }
+                },
+                "required": [
+                  "name"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -774,13 +800,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Group2834184090View"
+                  "$ref": "#/components/schemas/GroupCreate"
                 }
               }
             }
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -790,22 +819,21 @@
     },
     "/groups/{id}": {
       "get": {
-        "summary": "Find a Group by ID",
-        "description": "Finds the Group with the requested ID and returns it.",
         "tags": [
           "Group"
         ],
+        "summary": "Find a Group by ID",
+        "description": "Finds the Group with the requested ID and returns it.",
         "operationId": "readGroup",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the Group",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -814,7 +842,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Group2834184090View"
+                  "$ref": "#/components/schemas/GroupRead"
                 }
               }
             }
@@ -825,28 +853,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "delete": {
-        "summary": "Deletes a Group by ID",
-        "description": "Deletes the Group with the requested ID.",
         "tags": [
           "Group"
         ],
+        "summary": "Deletes a Group by ID",
+        "description": "Deletes the Group with the requested ID.",
         "operationId": "deleteGroup",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Group to delete",
-            "required": true,
+            "description": "ID of the Group",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -859,28 +889,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "patch": {
-        "summary": "Updates a Group",
-        "description": "Updates a Group and persists changes to storage.",
         "tags": [
           "Group"
         ],
+        "summary": "Updates a Group",
+        "description": "Updates a Group and persists changes to storage.",
         "operationId": "updateGroup",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Group to update",
-            "required": true,
+            "description": "ID of the Group",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -889,9 +921,6 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name"
-                ],
                 "properties": {
                   "name": {
                     "type": "string"
@@ -899,14 +928,14 @@
                   "users": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -914,7 +943,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Group2834184090View"
+                  "$ref": "#/components/schemas/GroupUpdate"
                 }
               }
             }
@@ -924,6 +953,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -933,20 +965,28 @@
     },
     "/groups/{id}/users": {
       "get": {
-        "summary": "Find the attached Users",
-        "description": "Find the attached Users of the Group with the given ID",
         "tags": [
           "Group"
         ],
+        "summary": "List attached Users",
+        "description": "List attached Users.",
         "operationId": "listGroupUsers",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Group",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
           {
             "name": "page",
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -954,30 +994,19 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Group",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Users attached to Group with requested ID was found",
+            "description": "result Groups list",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User2570247333View"
+                    "$ref": "#/components/schemas/Group_UsersList"
                   }
                 }
               }
@@ -989,6 +1018,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -997,11 +1029,11 @@
     },
     "/pets": {
       "get": {
-        "summary": "List Pets",
-        "description": "List Pets.",
         "tags": [
           "Pet"
         ],
+        "summary": "List Pets",
+        "description": "List Pets.",
         "operationId": "listPet",
         "parameters": [
           {
@@ -1009,8 +1041,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1018,8 +1049,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1031,7 +1061,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Pet359800019View"
+                    "$ref": "#/components/schemas/PetList"
                   }
                 }
               }
@@ -1043,17 +1073,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "post": {
-        "summary": "Create a new Pet",
-        "description": "Creates a new Pet and persists it to storage.",
         "tags": [
           "Pet"
         ],
+        "summary": "Create a new Pet",
+        "description": "Creates a new Pet and persists it to storage.",
         "operationId": "createPet",
         "requestBody": {
           "description": "Pet to create",
@@ -1061,22 +1094,22 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "age",
-                  "name"
-                ],
                 "properties": {
-                  "age": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
                   "name": {
                     "type": "string"
+                  },
+                  "age": {
+                    "type": "integer"
                   }
-                }
+                },
+                "required": [
+                  "name",
+                  "age"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1084,13 +1117,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet359800019View"
+                  "$ref": "#/components/schemas/PetCreate"
                 }
               }
             }
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1100,22 +1136,21 @@
     },
     "/pets/{id}": {
       "get": {
-        "summary": "Find a Pet by ID",
-        "description": "Finds the Pet with the requested ID and returns it.",
         "tags": [
           "Pet"
         ],
+        "summary": "Find a Pet by ID",
+        "description": "Finds the Pet with the requested ID and returns it.",
         "operationId": "readPet",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1124,7 +1159,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet359800019View"
+                  "$ref": "#/components/schemas/PetRead"
                 }
               }
             }
@@ -1135,28 +1170,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "delete": {
-        "summary": "Deletes a Pet by ID",
-        "description": "Deletes the Pet with the requested ID.",
         "tags": [
           "Pet"
         ],
+        "summary": "Deletes a Pet by ID",
+        "description": "Deletes the Pet with the requested ID.",
         "operationId": "deletePet",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Pet to delete",
-            "required": true,
+            "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1169,28 +1206,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "patch": {
-        "summary": "Updates a Pet",
-        "description": "Updates a Pet and persists changes to storage.",
         "tags": [
           "Pet"
         ],
+        "summary": "Updates a Pet",
+        "description": "Updates a Pet and persists changes to storage.",
         "operationId": "updatePet",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Pet to update",
-            "required": true,
+            "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1199,22 +1238,18 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "age",
-                  "name"
-                ],
                 "properties": {
-                  "age": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
                   "name": {
                     "type": "string"
+                  },
+                  "age": {
+                    "type": "integer"
                   }
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1222,7 +1257,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet359800019View"
+                  "$ref": "#/components/schemas/PetUpdate"
                 }
               }
             }
@@ -1233,6 +1268,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1241,11 +1279,11 @@
     },
     "/pokemons": {
       "get": {
-        "summary": "List Pokemons",
-        "description": "List Pokemons.",
         "tags": [
           "Pokemon"
         ],
+        "summary": "List Pokemons",
+        "description": "List Pokemons.",
         "operationId": "listPokemon",
         "parameters": [
           {
@@ -1253,8 +1291,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1262,8 +1299,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1275,7 +1311,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Pokemon2727375384View"
+                    "$ref": "#/components/schemas/PokemonList"
                   }
                 }
               }
@@ -1287,17 +1323,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "post": {
-        "summary": "Create a new Pokemon",
-        "description": "Creates a new Pokemon and persists it to storage.",
         "tags": [
           "Pokemon"
         ],
+        "summary": "Create a new Pokemon",
+        "description": "Creates a new Pokemon and persists it to storage.",
         "operationId": "createPokemon",
         "requestBody": {
           "description": "Pokemon to create",
@@ -1305,55 +1344,54 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "created_at",
-                  "description",
-                  "height",
-                  "name",
-                  "updated_at",
-                  "weight"
-                ],
                 "properties": {
-                  "created_at": {
-                    "type": "string",
-                    "format": "date-time"
+                  "name": {
+                    "type": "string"
                   },
                   "description": {
                     "type": "string"
                   },
-                  "fights": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32"
-                    }
+                  "weight": {
+                    "type": "number",
+                    "format": "double"
                   },
                   "height": {
                     "type": "number",
                     "format": "double"
                   },
-                  "name": {
-                    "type": "string"
-                  },
-                  "opponents": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32"
-                    }
+                  "created_at": {
+                    "type": "string",
+                    "format": "date-time"
                   },
                   "updated_at": {
                     "type": "string",
                     "format": "date-time"
                   },
-                  "weight": {
-                    "type": "number",
-                    "format": "double"
+                  "fights": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "opponents": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
                   }
-                }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "weight",
+                  "height",
+                  "created_at",
+                  "updated_at"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1361,13 +1399,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pokemon2727375384View"
+                  "$ref": "#/components/schemas/PokemonCreate"
                 }
               }
             }
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1377,22 +1418,21 @@
     },
     "/pokemons/{id}": {
       "get": {
-        "summary": "Find a Pokemon by ID",
-        "description": "Finds the Pokemon with the requested ID and returns it.",
         "tags": [
           "Pokemon"
         ],
+        "summary": "Find a Pokemon by ID",
+        "description": "Finds the Pokemon with the requested ID and returns it.",
         "operationId": "readPokemon",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the Pokemon",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1401,7 +1441,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pokemon2727375384View"
+                  "$ref": "#/components/schemas/PokemonRead"
                 }
               }
             }
@@ -1412,28 +1452,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "delete": {
-        "summary": "Deletes a Pokemon by ID",
-        "description": "Deletes the Pokemon with the requested ID.",
         "tags": [
           "Pokemon"
         ],
+        "summary": "Deletes a Pokemon by ID",
+        "description": "Deletes the Pokemon with the requested ID.",
         "operationId": "deletePokemon",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Pokemon to delete",
-            "required": true,
+            "description": "ID of the Pokemon",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1446,28 +1488,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "patch": {
-        "summary": "Updates a Pokemon",
-        "description": "Updates a Pokemon and persists changes to storage.",
         "tags": [
           "Pokemon"
         ],
+        "summary": "Updates a Pokemon",
+        "description": "Updates a Pokemon and persists changes to storage.",
         "operationId": "updatePokemon",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the Pokemon to update",
-            "required": true,
+            "description": "ID of the Pokemon",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1476,50 +1520,42 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "description",
-                  "height",
-                  "name",
-                  "updated_at",
-                  "weight"
-                ],
                 "properties": {
+                  "name": {
+                    "type": "string"
+                  },
                   "description": {
                     "type": "string"
                   },
-                  "fights": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32"
-                    }
+                  "weight": {
+                    "type": "number",
+                    "format": "double"
                   },
                   "height": {
                     "type": "number",
                     "format": "double"
                   },
-                  "name": {
-                    "type": "string"
-                  },
-                  "opponents": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  },
                   "updated_at": {
                     "type": "string",
                     "format": "date-time"
                   },
-                  "weight": {
-                    "type": "number",
-                    "format": "double"
+                  "fights": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "opponents": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
                   }
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1527,7 +1563,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pokemon2727375384View"
+                  "$ref": "#/components/schemas/PokemonUpdate"
                 }
               }
             }
@@ -1537,6 +1573,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1546,20 +1585,28 @@
     },
     "/pokemons/{id}/fights": {
       "get": {
-        "summary": "Find the attached Battles",
-        "description": "Find the attached Battles of the Pokemon with the given ID",
         "tags": [
           "Pokemon"
         ],
+        "summary": "List attached Fights",
+        "description": "List attached Fights.",
         "operationId": "listPokemonFights",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Pokemon",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
           {
             "name": "page",
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1567,30 +1614,19 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Pokemon",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Battles attached to Pokemon with requested ID was found",
+            "description": "result Pokemons list",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Battle2279316362View"
+                    "$ref": "#/components/schemas/Pokemon_FightsList"
                   }
                 }
               }
@@ -1601,6 +1637,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1610,20 +1649,28 @@
     },
     "/pokemons/{id}/opponents": {
       "get": {
-        "summary": "Find the attached Battles",
-        "description": "Find the attached Battles of the Pokemon with the given ID",
         "tags": [
           "Pokemon"
         ],
+        "summary": "List attached Opponents",
+        "description": "List attached Opponents.",
         "operationId": "listPokemonOpponents",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Pokemon",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
           {
             "name": "page",
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1631,30 +1678,19 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Pokemon",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Battles attached to Pokemon with requested ID was found",
+            "description": "result Pokemons list",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Battle2279316362View"
+                    "$ref": "#/components/schemas/Pokemon_OpponentsList"
                   }
                 }
               }
@@ -1666,6 +1702,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1674,11 +1713,11 @@
     },
     "/users": {
       "get": {
-        "summary": "List Users",
-        "description": "List Users.",
         "tags": [
           "User"
         ],
+        "summary": "List Users",
+        "description": "List Users.",
         "operationId": "listUser",
         "parameters": [
           {
@@ -1686,8 +1725,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1695,8 +1733,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1708,7 +1745,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User2570247333View"
+                    "$ref": "#/components/schemas/UserList"
                   }
                 }
               }
@@ -1720,17 +1757,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "post": {
-        "summary": "Create a new User",
-        "description": "Creates a new User and persists it to storage.",
         "tags": [
           "User"
         ],
+        "summary": "Create a new User",
+        "description": "Creates a new User and persists it to storage.",
         "operationId": "createUser",
         "requestBody": {
           "description": "User to create",
@@ -1738,36 +1778,34 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "age",
-                  "name"
-                ],
                 "properties": {
                   "age": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
                   },
                   "cars": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   },
                   "groups": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
-                  },
-                  "name": {
-                    "type": "string"
                   }
-                }
+                },
+                "required": [
+                  "age",
+                  "name"
+                ]
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1775,13 +1813,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User2570247333View"
+                  "$ref": "#/components/schemas/UserCreate"
                 }
               }
             }
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1791,22 +1832,21 @@
     },
     "/users/{id}": {
       "get": {
-        "summary": "Find a User by ID",
-        "description": "Finds the User with the requested ID and returns it.",
         "tags": [
           "User"
         ],
+        "summary": "Find a User by ID",
+        "description": "Finds the User with the requested ID and returns it.",
         "operationId": "readUser",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the User",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1815,7 +1855,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User2570247333View"
+                  "$ref": "#/components/schemas/UserRead"
                 }
               }
             }
@@ -1826,28 +1866,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "delete": {
-        "summary": "Deletes a User by ID",
-        "description": "Deletes the User with the requested ID.",
         "tags": [
           "User"
         ],
+        "summary": "Deletes a User by ID",
+        "description": "Deletes the User with the requested ID.",
         "operationId": "deleteUser",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the User to delete",
-            "required": true,
+            "description": "ID of the User",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1860,28 +1902,30 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
         }
       },
       "patch": {
-        "summary": "Updates a User",
-        "description": "Updates a User and persists changes to storage.",
         "tags": [
           "User"
         ],
+        "summary": "Updates a User",
+        "description": "Updates a User and persists changes to storage.",
         "operationId": "updateUser",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the User to update",
-            "required": true,
+            "description": "ID of the User",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "integer"
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1890,36 +1934,30 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "age",
-                  "name"
-                ],
                 "properties": {
                   "age": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
                   },
                   "cars": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   },
                   "groups": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
-                  },
-                  "name": {
-                    "type": "string"
                   }
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1927,7 +1965,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User2570247333View"
+                  "$ref": "#/components/schemas/UserUpdate"
                 }
               }
             }
@@ -1937,6 +1975,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1946,20 +1987,28 @@
     },
     "/users/{id}/cars": {
       "get": {
-        "summary": "Find the attached Cars",
-        "description": "Find the attached Cars of the User with the given ID",
         "tags": [
           "User"
         ],
+        "summary": "List attached Cars",
+        "description": "List attached Cars.",
         "operationId": "listUserCars",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the User",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
           {
             "name": "page",
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1967,30 +2016,19 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the User",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Cars attached to User with requested ID was found",
+            "description": "result Users list",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Car2526155363View"
+                    "$ref": "#/components/schemas/User_CarsList"
                   }
                 }
               }
@@ -2001,6 +2039,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -2010,20 +2051,28 @@
     },
     "/users/{id}/groups": {
       "get": {
-        "summary": "Find the attached Groups",
-        "description": "Find the attached Groups of the User with the given ID",
         "tags": [
           "User"
         ],
+        "summary": "List attached Groups",
+        "description": "List attached Groups.",
         "operationId": "listUserGroups",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the User",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
           {
             "name": "page",
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2031,30 +2080,19 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the User",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Groups attached to User with requested ID was found",
+            "description": "result Users list",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Group2834184090View"
+                    "$ref": "#/components/schemas/User_GroupsList"
                   }
                 }
               }
@@ -2065,6 +2103,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -2075,43 +2116,246 @@
   },
   "components": {
     "schemas": {
-      "Battle2279316362View": {
+      "Battle": {
         "type": "object",
-        "required": [
-          "created_at",
-          "id",
-          "result",
-          "updated_at"
-        ],
         "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "result": {
+            "type": "string"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time"
           },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "contender": {
+            "$ref": "#/components/schemas/Pokemon"
+          },
+          "oponent": {
+            "$ref": "#/components/schemas/Pokemon"
+          }
+        },
+        "required": [
+          "id",
+          "result",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "BattleCreate": {
+        "type": "object",
+        "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "result": {
             "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
           },
           "updated_at": {
             "type": "string",
             "format": "date-time"
           }
-        }
+        },
+        "required": [
+          "id",
+          "result",
+          "created_at",
+          "updated_at"
+        ]
       },
-      "Car2526155363View": {
+      "BattleList": {
         "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "result": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "result",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "BattleRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "result": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "result",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "BattleUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "result": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "result",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "Battle_ContenderRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "weight",
+          "height",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "Battle_OponentRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "weight",
+          "height",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "Car": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "model": {
+            "type": "string"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Car"
+            }
+          }
+        },
         "required": [
           "id",
           "model",
           "registered_at"
-        ],
+        ]
+      },
+      "CarCreate": {
+        "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "model": {
             "type": "string"
@@ -2120,105 +2364,686 @@
             "type": "string",
             "format": "date-time"
           }
-        }
-      },
-      "Group2834184090View": {
-        "type": "object",
+        },
         "required": [
           "id",
-          "name"
-        ],
+          "model",
+          "registered_at"
+        ]
+      },
+      "CarList": {
+        "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
-          "name": {
+          "model": {
             "type": "string"
-          }
-        }
-      },
-      "Pet359800019View": {
-        "type": "object",
-        "required": [
-          "age",
-          "id",
-          "name"
-        ],
-        "properties": {
-          "age": {
-            "type": "integer",
-            "format": "int32"
           },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "Pokemon2727375384View": {
-        "type": "object",
-        "required": [
-          "created_at",
-          "description",
-          "height",
-          "id",
-          "name",
-          "updated_at",
-          "weight"
-        ],
-        "properties": {
-          "created_at": {
+          "registered_at": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "model",
+          "registered_at"
+        ]
+      },
+      "CarRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "model": {
+            "type": "string"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "model",
+          "registered_at"
+        ]
+      },
+      "CarUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "model": {
+            "type": "string"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "model",
+          "registered_at"
+        ]
+      },
+      "Car_CarsList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "model": {
+            "type": "string"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "model",
+          "registered_at"
+        ]
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "GroupCreate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "GroupList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "GroupRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "GroupUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "Group_UsersList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "age",
+          "name"
+        ]
+      },
+      "Pet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "PetCreate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "PetList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "PetRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "PetUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "Pokemon": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
           },
           "description": {
             "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
           },
           "height": {
             "type": "number",
             "format": "double"
           },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string"
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
           },
           "updated_at": {
             "type": "string",
             "format": "date-time"
           },
+          "fights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Battle"
+            }
+          },
+          "opponents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Battle"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "weight",
+          "height",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "PokemonCreate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
           "weight": {
             "type": "number",
             "format": "double"
-          }
-        }
-      },
-      "User2570247333View": {
-        "type": "object",
-        "required": [
-          "age",
-          "id",
-          "name"
-        ],
-        "properties": {
-          "age": {
-            "type": "integer",
-            "format": "int32"
           },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "weight",
+          "height",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "PokemonList": {
+        "type": "object",
+        "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "weight",
+          "height",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "PokemonRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "weight",
+          "height",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "PokemonUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "weight",
+          "height",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "Pokemon_FightsList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "result": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "result",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "Pokemon_OpponentsList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "result": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "result",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Car"
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "age",
+          "name"
+        ]
+      },
+      "UserCreate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "age": {
+            "type": "integer"
           },
           "name": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "id",
+          "age",
+          "name"
+        ]
+      },
+      "UserList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "age",
+          "name"
+        ]
+      },
+      "UserRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "age",
+          "name"
+        ]
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "age",
+          "name"
+        ]
+      },
+      "User_CarsList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "model": {
+            "type": "string"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "model",
+          "registered_at"
+        ]
+      },
+      "User_GroupsList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
       }
     },
     "responses": {
@@ -2230,44 +3055,40 @@
               "type": "object",
               "properties": {
                 "code": {
-                  "type": "integer",
-                  "format": "int32",
-                  "example": 400
-                },
-                "errors": {
-                  "type": "object",
-                  "properties": {}
+                  "type": "integer"
                 },
                 "status": {
-                  "type": "string",
-                  "example": "Bad Request"
-                }
-              }
+                  "type": "string"
+                },
+                "errors": {}
+              },
+              "required": [
+                "code",
+                "status"
+              ]
             }
           }
         }
       },
       "403": {
-        "description": "user misses permission",
+        "description": "insufficient permissions",
         "content": {
           "application/json": {
             "schema": {
               "type": "object",
               "properties": {
                 "code": {
-                  "type": "integer",
-                  "format": "int32",
-                  "example": 403
-                },
-                "errors": {
-                  "type": "object",
-                  "properties": {}
+                  "type": "integer"
                 },
                 "status": {
-                  "type": "string",
-                  "example": "Forbidden"
-                }
-              }
+                  "type": "string"
+                },
+                "errors": {}
+              },
+              "required": [
+                "code",
+                "status"
+              ]
             }
           }
         }
@@ -2280,19 +3101,17 @@
               "type": "object",
               "properties": {
                 "code": {
-                  "type": "integer",
-                  "format": "int32",
-                  "example": 404
-                },
-                "errors": {
-                  "type": "object",
-                  "properties": {}
+                  "type": "integer"
                 },
                 "status": {
-                  "type": "string",
-                  "example": "Not Found"
-                }
-              }
+                  "type": "string"
+                },
+                "errors": {}
+              },
+              "required": [
+                "code",
+                "status"
+              ]
             }
           }
         }
@@ -2305,19 +3124,17 @@
               "type": "object",
               "properties": {
                 "code": {
-                  "type": "integer",
-                  "format": "int32",
-                  "example": 409
-                },
-                "errors": {
-                  "type": "object",
-                  "properties": {}
+                  "type": "integer"
                 },
                 "status": {
-                  "type": "string",
-                  "example": "Conflict"
-                }
-              }
+                  "type": "string"
+                },
+                "errors": {}
+              },
+              "required": [
+                "code",
+                "status"
+              ]
             }
           }
         }
@@ -2330,25 +3147,21 @@
               "type": "object",
               "properties": {
                 "code": {
-                  "type": "integer",
-                  "format": "int32",
-                  "example": 500
-                },
-                "errors": {
-                  "type": "object",
-                  "properties": {}
+                  "type": "integer"
                 },
                 "status": {
-                  "type": "string",
-                  "example": "Internal Server Error"
-                }
-              }
+                  "type": "string"
+                },
+                "errors": {}
+              },
+              "required": [
+                "code",
+                "status"
+              ]
             }
           }
         }
       }
-    },
-    "parameters": {}
-  },
-  "openapi": "3.0.3"
+    }
+  }
 }
