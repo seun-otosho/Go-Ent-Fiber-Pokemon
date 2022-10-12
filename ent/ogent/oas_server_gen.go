@@ -5,6 +5,7 @@ package ogent
 import (
 	"context"
 
+	"github.com/go-faster/jx"
 	"go.opentelemetry.io/otel/metric/instrument/syncint64"
 
 	"github.com/ogen-go/ogen/otelogen"
@@ -30,6 +31,12 @@ type Handler interface {
 	//
 	// POST /groups
 	CreateGroup(ctx context.Context, req CreateGroupReq) (CreateGroupRes, error)
+	// CreateNote implements createNote operation.
+	//
+	// Creates a new Note and persists it to storage.
+	//
+	// POST /notes
+	CreateNote(ctx context.Context, req CreateNoteReq) (CreateNoteRes, error)
 	// CreatePet implements createPet operation.
 	//
 	// Creates a new Pet and persists it to storage.
@@ -42,6 +49,12 @@ type Handler interface {
 	//
 	// POST /pokemons
 	CreatePokemon(ctx context.Context, req CreatePokemonReq) (CreatePokemonRes, error)
+	// CreateTodo implements createTodo operation.
+	//
+	// Creates a new Todo and persists it to storage.
+	//
+	// POST /todos
+	CreateTodo(ctx context.Context, req jx.Raw) (CreateTodoRes, error)
 	// CreateUser implements createUser operation.
 	//
 	// Creates a new User and persists it to storage.
@@ -72,6 +85,12 @@ type Handler interface {
 	//
 	// DELETE /groups/{id}
 	DeleteGroup(ctx context.Context, params DeleteGroupParams) (DeleteGroupRes, error)
+	// DeleteNote implements deleteNote operation.
+	//
+	// Deletes the Note with the requested ID.
+	//
+	// DELETE /notes/{id}
+	DeleteNote(ctx context.Context, params DeleteNoteParams) (DeleteNoteRes, error)
 	// DeletePet implements deletePet operation.
 	//
 	// Deletes the Pet with the requested ID.
@@ -84,6 +103,12 @@ type Handler interface {
 	//
 	// DELETE /pokemons/{id}
 	DeletePokemon(ctx context.Context, params DeletePokemonParams) (DeletePokemonRes, error)
+	// DeleteTodo implements deleteTodo operation.
+	//
+	// Deletes the Todo with the requested ID.
+	//
+	// DELETE /todos/{id}
+	DeleteTodo(ctx context.Context, params DeleteTodoParams) (DeleteTodoRes, error)
 	// DeleteUser implements deleteUser operation.
 	//
 	// Deletes the User with the requested ID.
@@ -114,6 +139,12 @@ type Handler interface {
 	//
 	// GET /groups/{id}/users
 	ListGroupUsers(ctx context.Context, params ListGroupUsersParams) (ListGroupUsersRes, error)
+	// ListNote implements listNote operation.
+	//
+	// List Notes.
+	//
+	// GET /notes
+	ListNote(ctx context.Context, params ListNoteParams) (ListNoteRes, error)
 	// ListPet implements listPet operation.
 	//
 	// List Pets.
@@ -138,6 +169,12 @@ type Handler interface {
 	//
 	// GET /pokemons/{id}/opponents
 	ListPokemonOpponents(ctx context.Context, params ListPokemonOpponentsParams) (ListPokemonOpponentsRes, error)
+	// ListTodo implements listTodo operation.
+	//
+	// List Todos.
+	//
+	// GET /todos
+	ListTodo(ctx context.Context, params ListTodoParams) (ListTodoRes, error)
 	// ListUser implements listUser operation.
 	//
 	// List Users.
@@ -186,6 +223,12 @@ type Handler interface {
 	//
 	// GET /groups/{id}
 	ReadGroup(ctx context.Context, params ReadGroupParams) (ReadGroupRes, error)
+	// ReadNote implements readNote operation.
+	//
+	// Finds the Note with the requested ID and returns it.
+	//
+	// GET /notes/{id}
+	ReadNote(ctx context.Context, params ReadNoteParams) (ReadNoteRes, error)
 	// ReadPet implements readPet operation.
 	//
 	// Finds the Pet with the requested ID and returns it.
@@ -198,6 +241,12 @@ type Handler interface {
 	//
 	// GET /pokemons/{id}
 	ReadPokemon(ctx context.Context, params ReadPokemonParams) (ReadPokemonRes, error)
+	// ReadTodo implements readTodo operation.
+	//
+	// Finds the Todo with the requested ID and returns it.
+	//
+	// GET /todos/{id}
+	ReadTodo(ctx context.Context, params ReadTodoParams) (ReadTodoRes, error)
 	// ReadUser implements readUser operation.
 	//
 	// Finds the User with the requested ID and returns it.
@@ -222,6 +271,12 @@ type Handler interface {
 	//
 	// PATCH /groups/{id}
 	UpdateGroup(ctx context.Context, req UpdateGroupReq, params UpdateGroupParams) (UpdateGroupRes, error)
+	// UpdateNote implements updateNote operation.
+	//
+	// Updates a Note and persists changes to storage.
+	//
+	// PATCH /notes/{id}
+	UpdateNote(ctx context.Context, req UpdateNoteReq, params UpdateNoteParams) (UpdateNoteRes, error)
 	// UpdatePet implements updatePet operation.
 	//
 	// Updates a Pet and persists changes to storage.
@@ -234,6 +289,12 @@ type Handler interface {
 	//
 	// PATCH /pokemons/{id}
 	UpdatePokemon(ctx context.Context, req UpdatePokemonReq, params UpdatePokemonParams) (UpdatePokemonRes, error)
+	// UpdateTodo implements updateTodo operation.
+	//
+	// Updates a Todo and persists changes to storage.
+	//
+	// PATCH /todos/{id}
+	UpdateTodo(ctx context.Context, req jx.Raw, params UpdateTodoParams) (UpdateTodoRes, error)
 	// UpdateUser implements updateUser operation.
 	//
 	// Updates a User and persists changes to storage.

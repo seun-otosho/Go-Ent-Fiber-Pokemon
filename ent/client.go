@@ -13,8 +13,10 @@ import (
 	"GoEntFiberPokeman/ent/battle"
 	"GoEntFiberPokeman/ent/car"
 	"GoEntFiberPokeman/ent/group"
+	"GoEntFiberPokeman/ent/note"
 	"GoEntFiberPokeman/ent/pet"
 	"GoEntFiberPokeman/ent/pokemon"
+	"GoEntFiberPokeman/ent/todo"
 	"GoEntFiberPokeman/ent/user"
 
 	"entgo.io/ent/dialect"
@@ -33,10 +35,14 @@ type Client struct {
 	Car *CarClient
 	// Group is the client for interacting with the Group builders.
 	Group *GroupClient
+	// Note is the client for interacting with the Note builders.
+	Note *NoteClient
 	// Pet is the client for interacting with the Pet builders.
 	Pet *PetClient
 	// Pokemon is the client for interacting with the Pokemon builders.
 	Pokemon *PokemonClient
+	// Todo is the client for interacting with the Todo builders.
+	Todo *TodoClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -55,8 +61,10 @@ func (c *Client) init() {
 	c.Battle = NewBattleClient(c.config)
 	c.Car = NewCarClient(c.config)
 	c.Group = NewGroupClient(c.config)
+	c.Note = NewNoteClient(c.config)
 	c.Pet = NewPetClient(c.config)
 	c.Pokemon = NewPokemonClient(c.config)
+	c.Todo = NewTodoClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -94,8 +102,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Battle:  NewBattleClient(cfg),
 		Car:     NewCarClient(cfg),
 		Group:   NewGroupClient(cfg),
+		Note:    NewNoteClient(cfg),
 		Pet:     NewPetClient(cfg),
 		Pokemon: NewPokemonClient(cfg),
+		Todo:    NewTodoClient(cfg),
 		User:    NewUserClient(cfg),
 	}, nil
 }
@@ -119,8 +129,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Battle:  NewBattleClient(cfg),
 		Car:     NewCarClient(cfg),
 		Group:   NewGroupClient(cfg),
+		Note:    NewNoteClient(cfg),
 		Pet:     NewPetClient(cfg),
 		Pokemon: NewPokemonClient(cfg),
+		Todo:    NewTodoClient(cfg),
 		User:    NewUserClient(cfg),
 	}, nil
 }
@@ -153,8 +165,10 @@ func (c *Client) Use(hooks ...Hook) {
 	c.Battle.Use(hooks...)
 	c.Car.Use(hooks...)
 	c.Group.Use(hooks...)
+	c.Note.Use(hooks...)
 	c.Pet.Use(hooks...)
 	c.Pokemon.Use(hooks...)
+	c.Todo.Use(hooks...)
 	c.User.Use(hooks...)
 }
 
@@ -476,6 +490,96 @@ func (c *GroupClient) Hooks() []Hook {
 	return c.hooks.Group
 }
 
+// NoteClient is a client for the Note schema.
+type NoteClient struct {
+	config
+}
+
+// NewNoteClient returns a client for the Note from the given config.
+func NewNoteClient(c config) *NoteClient {
+	return &NoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `note.Hooks(f(g(h())))`.
+func (c *NoteClient) Use(hooks ...Hook) {
+	c.hooks.Note = append(c.hooks.Note, hooks...)
+}
+
+// Create returns a builder for creating a Note entity.
+func (c *NoteClient) Create() *NoteCreate {
+	mutation := newNoteMutation(c.config, OpCreate)
+	return &NoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Note entities.
+func (c *NoteClient) CreateBulk(builders ...*NoteCreate) *NoteCreateBulk {
+	return &NoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Note.
+func (c *NoteClient) Update() *NoteUpdate {
+	mutation := newNoteMutation(c.config, OpUpdate)
+	return &NoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NoteClient) UpdateOne(n *Note) *NoteUpdateOne {
+	mutation := newNoteMutation(c.config, OpUpdateOne, withNote(n))
+	return &NoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NoteClient) UpdateOneID(id int) *NoteUpdateOne {
+	mutation := newNoteMutation(c.config, OpUpdateOne, withNoteID(id))
+	return &NoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Note.
+func (c *NoteClient) Delete() *NoteDelete {
+	mutation := newNoteMutation(c.config, OpDelete)
+	return &NoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NoteClient) DeleteOne(n *Note) *NoteDeleteOne {
+	return c.DeleteOneID(n.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *NoteClient) DeleteOneID(id int) *NoteDeleteOne {
+	builder := c.Delete().Where(note.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NoteDeleteOne{builder}
+}
+
+// Query returns a query builder for Note.
+func (c *NoteClient) Query() *NoteQuery {
+	return &NoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Note entity by its id.
+func (c *NoteClient) Get(ctx context.Context, id int) (*Note, error) {
+	return c.Query().Where(note.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NoteClient) GetX(ctx context.Context, id int) *Note {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *NoteClient) Hooks() []Hook {
+	return c.hooks.Note
+}
+
 // PetClient is a client for the Pet schema.
 type PetClient struct {
 	config
@@ -686,6 +790,96 @@ func (c *PokemonClient) QueryOpponents(po *Pokemon) *BattleQuery {
 // Hooks returns the client hooks.
 func (c *PokemonClient) Hooks() []Hook {
 	return c.hooks.Pokemon
+}
+
+// TodoClient is a client for the Todo schema.
+type TodoClient struct {
+	config
+}
+
+// NewTodoClient returns a client for the Todo from the given config.
+func NewTodoClient(c config) *TodoClient {
+	return &TodoClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `todo.Hooks(f(g(h())))`.
+func (c *TodoClient) Use(hooks ...Hook) {
+	c.hooks.Todo = append(c.hooks.Todo, hooks...)
+}
+
+// Create returns a builder for creating a Todo entity.
+func (c *TodoClient) Create() *TodoCreate {
+	mutation := newTodoMutation(c.config, OpCreate)
+	return &TodoCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Todo entities.
+func (c *TodoClient) CreateBulk(builders ...*TodoCreate) *TodoCreateBulk {
+	return &TodoCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Todo.
+func (c *TodoClient) Update() *TodoUpdate {
+	mutation := newTodoMutation(c.config, OpUpdate)
+	return &TodoUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TodoClient) UpdateOne(t *Todo) *TodoUpdateOne {
+	mutation := newTodoMutation(c.config, OpUpdateOne, withTodo(t))
+	return &TodoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TodoClient) UpdateOneID(id int) *TodoUpdateOne {
+	mutation := newTodoMutation(c.config, OpUpdateOne, withTodoID(id))
+	return &TodoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Todo.
+func (c *TodoClient) Delete() *TodoDelete {
+	mutation := newTodoMutation(c.config, OpDelete)
+	return &TodoDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TodoClient) DeleteOne(t *Todo) *TodoDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *TodoClient) DeleteOneID(id int) *TodoDeleteOne {
+	builder := c.Delete().Where(todo.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TodoDeleteOne{builder}
+}
+
+// Query returns a query builder for Todo.
+func (c *TodoClient) Query() *TodoQuery {
+	return &TodoQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Todo entity by its id.
+func (c *TodoClient) Get(ctx context.Context, id int) (*Todo, error) {
+	return c.Query().Where(todo.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TodoClient) GetX(ctx context.Context, id int) *Todo {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TodoClient) Hooks() []Hook {
+	return c.hooks.Todo
 }
 
 // UserClient is a client for the User schema.

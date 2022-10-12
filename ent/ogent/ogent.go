@@ -10,8 +10,10 @@ import (
 	"GoEntFiberPokeman/ent/battle"
 	"GoEntFiberPokeman/ent/car"
 	"GoEntFiberPokeman/ent/group"
+	"GoEntFiberPokeman/ent/note"
 	"GoEntFiberPokeman/ent/pet"
 	"GoEntFiberPokeman/ent/pokemon"
+	"GoEntFiberPokeman/ent/todo"
 	"GoEntFiberPokeman/ent/user"
 
 	"github.com/go-faster/jx"
@@ -638,6 +640,183 @@ func (h *OgentHandler) ListGroupUsers(ctx context.Context, params ListGroupUsers
 	return (*ListGroupUsersOKApplicationJSON)(&r), nil
 }
 
+// CreateNote handles POST /notes requests.
+func (h *OgentHandler) CreateNote(ctx context.Context, req CreateNoteReq) (CreateNoteRes, error) {
+	b := h.client.Note.Create()
+	// Add all fields.
+	b.SetTitle(req.Title)
+	b.SetContent(req.Content)
+	b.SetPrivate(req.Private)
+	b.SetCreatedAt(req.CreatedAt)
+	// Add all edges.
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Note.Query().Where(note.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewNoteCreate(e), nil
+}
+
+// ReadNote handles GET /notes/{id} requests.
+func (h *OgentHandler) ReadNote(ctx context.Context, params ReadNoteParams) (ReadNoteRes, error) {
+	q := h.client.Note.Query().Where(note.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewNoteRead(e), nil
+}
+
+// UpdateNote handles PATCH /notes/{id} requests.
+func (h *OgentHandler) UpdateNote(ctx context.Context, req UpdateNoteReq, params UpdateNoteParams) (UpdateNoteRes, error) {
+	b := h.client.Note.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Title.Get(); ok {
+		b.SetTitle(v)
+	}
+	if v, ok := req.Content.Get(); ok {
+		b.SetContent(v)
+	}
+	if v, ok := req.Private.Get(); ok {
+		b.SetPrivate(v)
+	}
+	if v, ok := req.CreatedAt.Get(); ok {
+		b.SetCreatedAt(v)
+	}
+	// Add all edges.
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Note.Query().Where(note.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewNoteUpdate(e), nil
+}
+
+// DeleteNote handles DELETE /notes/{id} requests.
+func (h *OgentHandler) DeleteNote(ctx context.Context, params DeleteNoteParams) (DeleteNoteRes, error) {
+	err := h.client.Note.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteNoteNoContent), nil
+
+}
+
+// ListNote handles GET /notes requests.
+func (h *OgentHandler) ListNote(ctx context.Context, params ListNoteParams) (ListNoteRes, error) {
+	q := h.client.Note.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	r := NewNoteLists(es)
+	return (*ListNoteOKApplicationJSON)(&r), nil
+}
+
 // CreatePet handles POST /pets requests.
 func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error) {
 	b := h.client.Pet.Create()
@@ -1063,6 +1242,167 @@ func (h *OgentHandler) ListPokemonOpponents(ctx context.Context, params ListPoke
 	}
 	r := NewPokemonOpponentsLists(es)
 	return (*ListPokemonOpponentsOKApplicationJSON)(&r), nil
+}
+
+// CreateTodo handles POST /todos requests.
+func (h *OgentHandler) CreateTodo(ctx context.Context, req CreateTodoReq) (CreateTodoRes, error) {
+	b := h.client.Todo.Create()
+	// Add all fields.
+	// Add all edges.
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Todo.Query().Where(todo.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewTodoCreate(e), nil
+}
+
+// ReadTodo handles GET /todos/{id} requests.
+func (h *OgentHandler) ReadTodo(ctx context.Context, params ReadTodoParams) (ReadTodoRes, error) {
+	q := h.client.Todo.Query().Where(todo.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewTodoRead(e), nil
+}
+
+// UpdateTodo handles PATCH /todos/{id} requests.
+func (h *OgentHandler) UpdateTodo(ctx context.Context, req UpdateTodoReq, params UpdateTodoParams) (UpdateTodoRes, error) {
+	b := h.client.Todo.UpdateOneID(params.ID)
+	// Add all fields.
+	// Add all edges.
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Todo.Query().Where(todo.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewTodoUpdate(e), nil
+}
+
+// DeleteTodo handles DELETE /todos/{id} requests.
+func (h *OgentHandler) DeleteTodo(ctx context.Context, params DeleteTodoParams) (DeleteTodoRes, error) {
+	err := h.client.Todo.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteTodoNoContent), nil
+
+}
+
+// ListTodo handles GET /todos requests.
+func (h *OgentHandler) ListTodo(ctx context.Context, params ListTodoParams) (ListTodoRes, error) {
+	q := h.client.Todo.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	r := NewTodoLists(es)
+	return (*ListTodoOKApplicationJSON)(&r), nil
 }
 
 // CreateUser handles POST /users requests.

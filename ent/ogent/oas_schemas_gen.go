@@ -124,6 +124,13 @@ type CreateGroupReq struct {
 	Users []int  "json:\"users\""
 }
 
+type CreateNoteReq struct {
+	Title     string    "json:\"Title\""
+	Content   string    "json:\"Content\""
+	Private   bool      "json:\"Private\""
+	CreatedAt time.Time "json:\"created_at\""
+}
+
 type CreatePetReq struct {
 	Name string "json:\"name\""
 	Age  int    "json:\"age\""
@@ -172,6 +179,11 @@ type DeleteGroupNoContent struct{}
 
 func (*DeleteGroupNoContent) deleteGroupRes() {}
 
+// DeleteNoteNoContent is response for DeleteNote operation.
+type DeleteNoteNoContent struct{}
+
+func (*DeleteNoteNoContent) deleteNoteRes() {}
+
 // DeletePetNoContent is response for DeletePet operation.
 type DeletePetNoContent struct{}
 
@@ -181,6 +193,11 @@ func (*DeletePetNoContent) deletePetRes() {}
 type DeletePokemonNoContent struct{}
 
 func (*DeletePokemonNoContent) deletePokemonRes() {}
+
+// DeleteTodoNoContent is response for DeleteTodo operation.
+type DeleteTodoNoContent struct{}
+
+func (*DeleteTodoNoContent) deleteTodoRes() {}
 
 // DeleteUserNoContent is response for DeleteUser operation.
 type DeleteUserNoContent struct{}
@@ -240,6 +257,10 @@ type ListGroupUsersOKApplicationJSON []GroupUsersList
 
 func (ListGroupUsersOKApplicationJSON) listGroupUsersRes() {}
 
+type ListNoteOKApplicationJSON []NoteList
+
+func (ListNoteOKApplicationJSON) listNoteRes() {}
+
 type ListPetOKApplicationJSON []PetList
 
 func (ListPetOKApplicationJSON) listPetRes() {}
@@ -256,6 +277,10 @@ type ListPokemonOpponentsOKApplicationJSON []PokemonOpponentsList
 
 func (ListPokemonOpponentsOKApplicationJSON) listPokemonOpponentsRes() {}
 
+type ListTodoOKApplicationJSON []TodoList
+
+func (ListTodoOKApplicationJSON) listTodoRes() {}
+
 type ListUserCarsOKApplicationJSON []UserCarsList
 
 func (ListUserCarsOKApplicationJSON) listUserCarsRes() {}
@@ -267,6 +292,94 @@ func (ListUserGroupsOKApplicationJSON) listUserGroupsRes() {}
 type ListUserOKApplicationJSON []UserList
 
 func (ListUserOKApplicationJSON) listUserRes() {}
+
+// Ref: #/components/schemas/NoteCreate
+type NoteCreate struct {
+	ID        int       "json:\"id\""
+	Title     string    "json:\"Title\""
+	Content   string    "json:\"Content\""
+	Private   bool      "json:\"Private\""
+	CreatedAt time.Time "json:\"created_at\""
+}
+
+func (*NoteCreate) createNoteRes() {}
+
+// Ref: #/components/schemas/NoteList
+type NoteList struct {
+	ID        int       "json:\"id\""
+	Title     string    "json:\"Title\""
+	Content   string    "json:\"Content\""
+	Private   bool      "json:\"Private\""
+	CreatedAt time.Time "json:\"created_at\""
+}
+
+// Ref: #/components/schemas/NoteRead
+type NoteRead struct {
+	ID        int       "json:\"id\""
+	Title     string    "json:\"Title\""
+	Content   string    "json:\"Content\""
+	Private   bool      "json:\"Private\""
+	CreatedAt time.Time "json:\"created_at\""
+}
+
+func (*NoteRead) readNoteRes() {}
+
+// Ref: #/components/schemas/NoteUpdate
+type NoteUpdate struct {
+	ID        int       "json:\"id\""
+	Title     string    "json:\"Title\""
+	Content   string    "json:\"Content\""
+	Private   bool      "json:\"Private\""
+	CreatedAt time.Time "json:\"created_at\""
+}
+
+func (*NoteUpdate) updateNoteRes() {}
+
+// NewOptBool returns new OptBool with value set to v.
+func NewOptBool(v bool) OptBool {
+	return OptBool{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBool is optional bool.
+type OptBool struct {
+	Value bool
+	Set   bool
+}
+
+// IsSet returns true if OptBool was set.
+func (o OptBool) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBool) Reset() {
+	var v bool
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBool) SetTo(v bool) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBool) Get() (v bool, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptDateTime returns new OptDateTime with value set to v.
 func NewOptDateTime(v time.Time) OptDateTime {
@@ -561,23 +674,29 @@ type R400 struct {
 func (*R400) createBattleRes()         {}
 func (*R400) createCarRes()            {}
 func (*R400) createGroupRes()          {}
+func (*R400) createNoteRes()           {}
 func (*R400) createPetRes()            {}
 func (*R400) createPokemonRes()        {}
+func (*R400) createTodoRes()           {}
 func (*R400) createUserRes()           {}
 func (*R400) deleteBattleRes()         {}
 func (*R400) deleteCarRes()            {}
 func (*R400) deleteGroupRes()          {}
+func (*R400) deleteNoteRes()           {}
 func (*R400) deletePetRes()            {}
 func (*R400) deletePokemonRes()        {}
+func (*R400) deleteTodoRes()           {}
 func (*R400) deleteUserRes()           {}
 func (*R400) listBattleRes()           {}
 func (*R400) listCarRes()              {}
 func (*R400) listGroupRes()            {}
 func (*R400) listGroupUsersRes()       {}
+func (*R400) listNoteRes()             {}
 func (*R400) listPetRes()              {}
 func (*R400) listPokemonFightsRes()    {}
 func (*R400) listPokemonOpponentsRes() {}
 func (*R400) listPokemonRes()          {}
+func (*R400) listTodoRes()             {}
 func (*R400) listUserCarsRes()         {}
 func (*R400) listUserGroupsRes()       {}
 func (*R400) listUserRes()             {}
@@ -586,14 +705,18 @@ func (*R400) readBattleOponentRes()    {}
 func (*R400) readBattleRes()           {}
 func (*R400) readCarRes()              {}
 func (*R400) readGroupRes()            {}
+func (*R400) readNoteRes()             {}
 func (*R400) readPetRes()              {}
 func (*R400) readPokemonRes()          {}
+func (*R400) readTodoRes()             {}
 func (*R400) readUserRes()             {}
 func (*R400) updateBattleRes()         {}
 func (*R400) updateCarRes()            {}
 func (*R400) updateGroupRes()          {}
+func (*R400) updateNoteRes()           {}
 func (*R400) updatePetRes()            {}
 func (*R400) updatePokemonRes()        {}
+func (*R400) updateTodoRes()           {}
 func (*R400) updateUserRes()           {}
 
 type R404 struct {
@@ -605,17 +728,21 @@ type R404 struct {
 func (*R404) deleteBattleRes()         {}
 func (*R404) deleteCarRes()            {}
 func (*R404) deleteGroupRes()          {}
+func (*R404) deleteNoteRes()           {}
 func (*R404) deletePetRes()            {}
 func (*R404) deletePokemonRes()        {}
+func (*R404) deleteTodoRes()           {}
 func (*R404) deleteUserRes()           {}
 func (*R404) listBattleRes()           {}
 func (*R404) listCarRes()              {}
 func (*R404) listGroupRes()            {}
 func (*R404) listGroupUsersRes()       {}
+func (*R404) listNoteRes()             {}
 func (*R404) listPetRes()              {}
 func (*R404) listPokemonFightsRes()    {}
 func (*R404) listPokemonOpponentsRes() {}
 func (*R404) listPokemonRes()          {}
+func (*R404) listTodoRes()             {}
 func (*R404) listUserCarsRes()         {}
 func (*R404) listUserGroupsRes()       {}
 func (*R404) listUserRes()             {}
@@ -624,14 +751,18 @@ func (*R404) readBattleOponentRes()    {}
 func (*R404) readBattleRes()           {}
 func (*R404) readCarRes()              {}
 func (*R404) readGroupRes()            {}
+func (*R404) readNoteRes()             {}
 func (*R404) readPetRes()              {}
 func (*R404) readPokemonRes()          {}
+func (*R404) readTodoRes()             {}
 func (*R404) readUserRes()             {}
 func (*R404) updateBattleRes()         {}
 func (*R404) updateCarRes()            {}
 func (*R404) updateGroupRes()          {}
+func (*R404) updateNoteRes()           {}
 func (*R404) updatePetRes()            {}
 func (*R404) updatePokemonRes()        {}
+func (*R404) updateTodoRes()           {}
 func (*R404) updateUserRes()           {}
 
 type R409 struct {
@@ -643,23 +774,29 @@ type R409 struct {
 func (*R409) createBattleRes()         {}
 func (*R409) createCarRes()            {}
 func (*R409) createGroupRes()          {}
+func (*R409) createNoteRes()           {}
 func (*R409) createPetRes()            {}
 func (*R409) createPokemonRes()        {}
+func (*R409) createTodoRes()           {}
 func (*R409) createUserRes()           {}
 func (*R409) deleteBattleRes()         {}
 func (*R409) deleteCarRes()            {}
 func (*R409) deleteGroupRes()          {}
+func (*R409) deleteNoteRes()           {}
 func (*R409) deletePetRes()            {}
 func (*R409) deletePokemonRes()        {}
+func (*R409) deleteTodoRes()           {}
 func (*R409) deleteUserRes()           {}
 func (*R409) listBattleRes()           {}
 func (*R409) listCarRes()              {}
 func (*R409) listGroupRes()            {}
 func (*R409) listGroupUsersRes()       {}
+func (*R409) listNoteRes()             {}
 func (*R409) listPetRes()              {}
 func (*R409) listPokemonFightsRes()    {}
 func (*R409) listPokemonOpponentsRes() {}
 func (*R409) listPokemonRes()          {}
+func (*R409) listTodoRes()             {}
 func (*R409) listUserCarsRes()         {}
 func (*R409) listUserGroupsRes()       {}
 func (*R409) listUserRes()             {}
@@ -668,14 +805,18 @@ func (*R409) readBattleOponentRes()    {}
 func (*R409) readBattleRes()           {}
 func (*R409) readCarRes()              {}
 func (*R409) readGroupRes()            {}
+func (*R409) readNoteRes()             {}
 func (*R409) readPetRes()              {}
 func (*R409) readPokemonRes()          {}
+func (*R409) readTodoRes()             {}
 func (*R409) readUserRes()             {}
 func (*R409) updateBattleRes()         {}
 func (*R409) updateCarRes()            {}
 func (*R409) updateGroupRes()          {}
+func (*R409) updateNoteRes()           {}
 func (*R409) updatePetRes()            {}
 func (*R409) updatePokemonRes()        {}
+func (*R409) updateTodoRes()           {}
 func (*R409) updateUserRes()           {}
 
 type R500 struct {
@@ -687,23 +828,29 @@ type R500 struct {
 func (*R500) createBattleRes()         {}
 func (*R500) createCarRes()            {}
 func (*R500) createGroupRes()          {}
+func (*R500) createNoteRes()           {}
 func (*R500) createPetRes()            {}
 func (*R500) createPokemonRes()        {}
+func (*R500) createTodoRes()           {}
 func (*R500) createUserRes()           {}
 func (*R500) deleteBattleRes()         {}
 func (*R500) deleteCarRes()            {}
 func (*R500) deleteGroupRes()          {}
+func (*R500) deleteNoteRes()           {}
 func (*R500) deletePetRes()            {}
 func (*R500) deletePokemonRes()        {}
+func (*R500) deleteTodoRes()           {}
 func (*R500) deleteUserRes()           {}
 func (*R500) listBattleRes()           {}
 func (*R500) listCarRes()              {}
 func (*R500) listGroupRes()            {}
 func (*R500) listGroupUsersRes()       {}
+func (*R500) listNoteRes()             {}
 func (*R500) listPetRes()              {}
 func (*R500) listPokemonFightsRes()    {}
 func (*R500) listPokemonOpponentsRes() {}
 func (*R500) listPokemonRes()          {}
+func (*R500) listTodoRes()             {}
 func (*R500) listUserCarsRes()         {}
 func (*R500) listUserGroupsRes()       {}
 func (*R500) listUserRes()             {}
@@ -712,15 +859,45 @@ func (*R500) readBattleOponentRes()    {}
 func (*R500) readBattleRes()           {}
 func (*R500) readCarRes()              {}
 func (*R500) readGroupRes()            {}
+func (*R500) readNoteRes()             {}
 func (*R500) readPetRes()              {}
 func (*R500) readPokemonRes()          {}
+func (*R500) readTodoRes()             {}
 func (*R500) readUserRes()             {}
 func (*R500) updateBattleRes()         {}
 func (*R500) updateCarRes()            {}
 func (*R500) updateGroupRes()          {}
+func (*R500) updateNoteRes()           {}
 func (*R500) updatePetRes()            {}
 func (*R500) updatePokemonRes()        {}
+func (*R500) updateTodoRes()           {}
 func (*R500) updateUserRes()           {}
+
+// Ref: #/components/schemas/TodoCreate
+type TodoCreate struct {
+	ID int "json:\"id\""
+}
+
+func (*TodoCreate) createTodoRes() {}
+
+// Ref: #/components/schemas/TodoList
+type TodoList struct {
+	ID int "json:\"id\""
+}
+
+// Ref: #/components/schemas/TodoRead
+type TodoRead struct {
+	ID int "json:\"id\""
+}
+
+func (*TodoRead) readTodoRes() {}
+
+// Ref: #/components/schemas/TodoUpdate
+type TodoUpdate struct {
+	ID int "json:\"id\""
+}
+
+func (*TodoUpdate) updateTodoRes() {}
 
 type UpdateBattleReq struct {
 	Result    OptString   "json:\"result\""
@@ -737,6 +914,13 @@ type UpdateCarReq struct {
 type UpdateGroupReq struct {
 	Name  OptString "json:\"name\""
 	Users []int     "json:\"users\""
+}
+
+type UpdateNoteReq struct {
+	Title     OptString   "json:\"Title\""
+	Content   OptString   "json:\"Content\""
+	Private   OptBool     "json:\"Private\""
+	CreatedAt OptDateTime "json:\"created_at\""
 }
 
 type UpdatePetReq struct {

@@ -5,6 +5,7 @@ package ent
 import (
 	"GoEntFiberPokeman/ent/battle"
 	"GoEntFiberPokeman/ent/group"
+	"GoEntFiberPokeman/ent/note"
 	"GoEntFiberPokeman/ent/pokemon"
 	"GoEntFiberPokeman/ent/schema"
 	"GoEntFiberPokeman/ent/user"
@@ -31,6 +32,16 @@ func init() {
 	groupDescName := groupFields[0].Descriptor()
 	// group.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	group.NameValidator = groupDescName.Validators[0].(func(string) error)
+	noteFields := schema.Note{}.Fields()
+	_ = noteFields
+	// noteDescPrivate is the schema descriptor for Private field.
+	noteDescPrivate := noteFields[2].Descriptor()
+	// note.DefaultPrivate holds the default value on creation for the Private field.
+	note.DefaultPrivate = noteDescPrivate.Default.(bool)
+	// noteDescCreatedAt is the schema descriptor for created_at field.
+	noteDescCreatedAt := noteFields[3].Descriptor()
+	// note.DefaultCreatedAt holds the default value on creation for the created_at field.
+	note.DefaultCreatedAt = noteDescCreatedAt.Default.(func() time.Time)
 	pokemonFields := schema.Pokemon{}.Fields()
 	_ = pokemonFields
 	// pokemonDescName is the schema descriptor for name field.

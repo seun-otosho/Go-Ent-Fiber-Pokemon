@@ -27,8 +27,10 @@ type hooks struct {
 	Battle  []ent.Hook
 	Car     []ent.Hook
 	Group   []ent.Hook
+	Note    []ent.Hook
 	Pet     []ent.Hook
 	Pokemon []ent.Hook
+	Todo    []ent.Hook
 	User    []ent.Hook
 }
 

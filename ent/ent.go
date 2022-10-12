@@ -6,8 +6,10 @@ import (
 	"GoEntFiberPokeman/ent/battle"
 	"GoEntFiberPokeman/ent/car"
 	"GoEntFiberPokeman/ent/group"
+	"GoEntFiberPokeman/ent/note"
 	"GoEntFiberPokeman/ent/pet"
 	"GoEntFiberPokeman/ent/pokemon"
+	"GoEntFiberPokeman/ent/todo"
 	"GoEntFiberPokeman/ent/user"
 	"context"
 	"errors"
@@ -39,8 +41,10 @@ func columnChecker(table string) func(string) error {
 		battle.Table:  battle.ValidColumn,
 		car.Table:     car.ValidColumn,
 		group.Table:   group.ValidColumn,
+		note.Table:    note.ValidColumn,
 		pet.Table:     pet.ValidColumn,
 		pokemon.Table: pokemon.ValidColumn,
+		todo.Table:    todo.ValidColumn,
 		user.Table:    user.ValidColumn,
 	}
 	check, ok := checks[table]

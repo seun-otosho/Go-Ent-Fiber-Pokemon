@@ -5,6 +5,8 @@ package ogent
 import (
 	"context"
 
+	"github.com/go-faster/jx"
+
 	ht "github.com/ogen-go/ogen/http"
 )
 
@@ -40,6 +42,15 @@ func (UnimplementedHandler) CreateGroup(ctx context.Context, req CreateGroupReq)
 	return r, ht.ErrNotImplemented
 }
 
+// CreateNote implements createNote operation.
+//
+// Creates a new Note and persists it to storage.
+//
+// POST /notes
+func (UnimplementedHandler) CreateNote(ctx context.Context, req CreateNoteReq) (r CreateNoteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // CreatePet implements createPet operation.
 //
 // Creates a new Pet and persists it to storage.
@@ -55,6 +66,15 @@ func (UnimplementedHandler) CreatePet(ctx context.Context, req CreatePetReq) (r 
 //
 // POST /pokemons
 func (UnimplementedHandler) CreatePokemon(ctx context.Context, req CreatePokemonReq) (r CreatePokemonRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CreateTodo implements createTodo operation.
+//
+// Creates a new Todo and persists it to storage.
+//
+// POST /todos
+func (UnimplementedHandler) CreateTodo(ctx context.Context, req jx.Raw) (r CreateTodoRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -103,6 +123,15 @@ func (UnimplementedHandler) DeleteGroup(ctx context.Context, params DeleteGroupP
 	return r, ht.ErrNotImplemented
 }
 
+// DeleteNote implements deleteNote operation.
+//
+// Deletes the Note with the requested ID.
+//
+// DELETE /notes/{id}
+func (UnimplementedHandler) DeleteNote(ctx context.Context, params DeleteNoteParams) (r DeleteNoteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // DeletePet implements deletePet operation.
 //
 // Deletes the Pet with the requested ID.
@@ -118,6 +147,15 @@ func (UnimplementedHandler) DeletePet(ctx context.Context, params DeletePetParam
 //
 // DELETE /pokemons/{id}
 func (UnimplementedHandler) DeletePokemon(ctx context.Context, params DeletePokemonParams) (r DeletePokemonRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DeleteTodo implements deleteTodo operation.
+//
+// Deletes the Todo with the requested ID.
+//
+// DELETE /todos/{id}
+func (UnimplementedHandler) DeleteTodo(ctx context.Context, params DeleteTodoParams) (r DeleteTodoRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -166,6 +204,15 @@ func (UnimplementedHandler) ListGroupUsers(ctx context.Context, params ListGroup
 	return r, ht.ErrNotImplemented
 }
 
+// ListNote implements listNote operation.
+//
+// List Notes.
+//
+// GET /notes
+func (UnimplementedHandler) ListNote(ctx context.Context, params ListNoteParams) (r ListNoteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // ListPet implements listPet operation.
 //
 // List Pets.
@@ -199,6 +246,15 @@ func (UnimplementedHandler) ListPokemonFights(ctx context.Context, params ListPo
 //
 // GET /pokemons/{id}/opponents
 func (UnimplementedHandler) ListPokemonOpponents(ctx context.Context, params ListPokemonOpponentsParams) (r ListPokemonOpponentsRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListTodo implements listTodo operation.
+//
+// List Todos.
+//
+// GET /todos
+func (UnimplementedHandler) ListTodo(ctx context.Context, params ListTodoParams) (r ListTodoRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -274,6 +330,15 @@ func (UnimplementedHandler) ReadGroup(ctx context.Context, params ReadGroupParam
 	return r, ht.ErrNotImplemented
 }
 
+// ReadNote implements readNote operation.
+//
+// Finds the Note with the requested ID and returns it.
+//
+// GET /notes/{id}
+func (UnimplementedHandler) ReadNote(ctx context.Context, params ReadNoteParams) (r ReadNoteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // ReadPet implements readPet operation.
 //
 // Finds the Pet with the requested ID and returns it.
@@ -289,6 +354,15 @@ func (UnimplementedHandler) ReadPet(ctx context.Context, params ReadPetParams) (
 //
 // GET /pokemons/{id}
 func (UnimplementedHandler) ReadPokemon(ctx context.Context, params ReadPokemonParams) (r ReadPokemonRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ReadTodo implements readTodo operation.
+//
+// Finds the Todo with the requested ID and returns it.
+//
+// GET /todos/{id}
+func (UnimplementedHandler) ReadTodo(ctx context.Context, params ReadTodoParams) (r ReadTodoRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -328,6 +402,15 @@ func (UnimplementedHandler) UpdateGroup(ctx context.Context, req UpdateGroupReq,
 	return r, ht.ErrNotImplemented
 }
 
+// UpdateNote implements updateNote operation.
+//
+// Updates a Note and persists changes to storage.
+//
+// PATCH /notes/{id}
+func (UnimplementedHandler) UpdateNote(ctx context.Context, req UpdateNoteReq, params UpdateNoteParams) (r UpdateNoteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // UpdatePet implements updatePet operation.
 //
 // Updates a Pet and persists changes to storage.
@@ -343,6 +426,15 @@ func (UnimplementedHandler) UpdatePet(ctx context.Context, req UpdatePetReq, par
 //
 // PATCH /pokemons/{id}
 func (UnimplementedHandler) UpdatePokemon(ctx context.Context, req UpdatePokemonReq, params UpdatePokemonParams) (r UpdatePokemonRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateTodo implements updateTodo operation.
+//
+// Updates a Todo and persists changes to storage.
+//
+// PATCH /todos/{id}
+func (UnimplementedHandler) UpdateTodo(ctx context.Context, req jx.Raw, params UpdateTodoParams) (r UpdateTodoRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

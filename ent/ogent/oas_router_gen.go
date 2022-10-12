@@ -305,6 +305,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 				}
+			case 'n': // Prefix: "notes"
+				if l := len("notes"); len(elem) >= l && elem[0:l] == "notes" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleListNoteRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateNoteRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteNoteRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadNoteRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateNoteRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
+
+						return
+					}
+				}
 			case 'p': // Prefix: "p"
 				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
 					elem = elem[l:]
@@ -480,6 +534,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}
 							}
 						}
+					}
+				}
+			case 't': // Prefix: "todos"
+				if l := len("todos"); len(elem) >= l && elem[0:l] == "todos" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleListTodoRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateTodoRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteTodoRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadTodoRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateTodoRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
+
+						return
 					}
 				}
 			case 'u': // Prefix: "users"
@@ -949,6 +1057,72 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						}
 					}
 				}
+			case 'n': // Prefix: "notes"
+				if l := len("notes"); len(elem) >= l && elem[0:l] == "notes" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = "ListNote"
+						r.operationID = "listNote"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateNote"
+						r.operationID = "createNote"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						switch method {
+						case "DELETE":
+							// Leaf: DeleteNote
+							r.name = "DeleteNote"
+							r.operationID = "deleteNote"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							// Leaf: ReadNote
+							r.name = "ReadNote"
+							r.operationID = "readNote"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							// Leaf: UpdateNote
+							r.name = "UpdateNote"
+							r.operationID = "updateNote"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+				}
 			case 'p': // Prefix: "p"
 				if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
 					elem = elem[l:]
@@ -1145,6 +1319,72 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 									}
 								}
 							}
+						}
+					}
+				}
+			case 't': // Prefix: "todos"
+				if l := len("todos"); len(elem) >= l && elem[0:l] == "todos" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = "ListTodo"
+						r.operationID = "listTodo"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateTodo"
+						r.operationID = "createTodo"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						switch method {
+						case "DELETE":
+							// Leaf: DeleteTodo
+							r.name = "DeleteTodo"
+							r.operationID = "deleteTodo"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							// Leaf: ReadTodo
+							r.name = "ReadTodo"
+							r.operationID = "readTodo"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							// Leaf: UpdateTodo
+							r.name = "UpdateTodo"
+							r.operationID = "updateTodo"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
 						}
 					}
 				}

@@ -447,6 +447,130 @@ func (u *GroupUsersList) Elem() GroupUsersList {
 	return *u
 }
 
+func NewNoteCreate(e *ent.Note) *NoteCreate {
+	if e == nil {
+		return nil
+	}
+	var ret NoteCreate
+	ret.ID = e.ID
+	ret.Title = e.Title
+	ret.Content = e.Content
+	ret.Private = e.Private
+	ret.CreatedAt = e.CreatedAt
+	return &ret
+}
+
+func NewNoteCreates(es []*ent.Note) []NoteCreate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]NoteCreate, len(es))
+	for i, e := range es {
+		r[i] = NewNoteCreate(e).Elem()
+	}
+	return r
+}
+
+func (n *NoteCreate) Elem() NoteCreate {
+	if n == nil {
+		return NoteCreate{}
+	}
+	return *n
+}
+
+func NewNoteList(e *ent.Note) *NoteList {
+	if e == nil {
+		return nil
+	}
+	var ret NoteList
+	ret.ID = e.ID
+	ret.Title = e.Title
+	ret.Content = e.Content
+	ret.Private = e.Private
+	ret.CreatedAt = e.CreatedAt
+	return &ret
+}
+
+func NewNoteLists(es []*ent.Note) []NoteList {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]NoteList, len(es))
+	for i, e := range es {
+		r[i] = NewNoteList(e).Elem()
+	}
+	return r
+}
+
+func (n *NoteList) Elem() NoteList {
+	if n == nil {
+		return NoteList{}
+	}
+	return *n
+}
+
+func NewNoteRead(e *ent.Note) *NoteRead {
+	if e == nil {
+		return nil
+	}
+	var ret NoteRead
+	ret.ID = e.ID
+	ret.Title = e.Title
+	ret.Content = e.Content
+	ret.Private = e.Private
+	ret.CreatedAt = e.CreatedAt
+	return &ret
+}
+
+func NewNoteReads(es []*ent.Note) []NoteRead {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]NoteRead, len(es))
+	for i, e := range es {
+		r[i] = NewNoteRead(e).Elem()
+	}
+	return r
+}
+
+func (n *NoteRead) Elem() NoteRead {
+	if n == nil {
+		return NoteRead{}
+	}
+	return *n
+}
+
+func NewNoteUpdate(e *ent.Note) *NoteUpdate {
+	if e == nil {
+		return nil
+	}
+	var ret NoteUpdate
+	ret.ID = e.ID
+	ret.Title = e.Title
+	ret.Content = e.Content
+	ret.Private = e.Private
+	ret.CreatedAt = e.CreatedAt
+	return &ret
+}
+
+func NewNoteUpdates(es []*ent.Note) []NoteUpdate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]NoteUpdate, len(es))
+	for i, e := range es {
+		r[i] = NewNoteUpdate(e).Elem()
+	}
+	return r
+}
+
+func (n *NoteUpdate) Elem() NoteUpdate {
+	if n == nil {
+		return NoteUpdate{}
+	}
+	return *n
+}
+
 func NewPetCreate(e *ent.Pet) *PetCreate {
 	if e == nil {
 		return nil
@@ -753,6 +877,114 @@ func (b *PokemonOpponentsList) Elem() PokemonOpponentsList {
 		return PokemonOpponentsList{}
 	}
 	return *b
+}
+
+func NewTodoCreate(e *ent.Todo) *TodoCreate {
+	if e == nil {
+		return nil
+	}
+	var ret TodoCreate
+	ret.ID = e.ID
+	return &ret
+}
+
+func NewTodoCreates(es []*ent.Todo) []TodoCreate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]TodoCreate, len(es))
+	for i, e := range es {
+		r[i] = NewTodoCreate(e).Elem()
+	}
+	return r
+}
+
+func (t *TodoCreate) Elem() TodoCreate {
+	if t == nil {
+		return TodoCreate{}
+	}
+	return *t
+}
+
+func NewTodoList(e *ent.Todo) *TodoList {
+	if e == nil {
+		return nil
+	}
+	var ret TodoList
+	ret.ID = e.ID
+	return &ret
+}
+
+func NewTodoLists(es []*ent.Todo) []TodoList {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]TodoList, len(es))
+	for i, e := range es {
+		r[i] = NewTodoList(e).Elem()
+	}
+	return r
+}
+
+func (t *TodoList) Elem() TodoList {
+	if t == nil {
+		return TodoList{}
+	}
+	return *t
+}
+
+func NewTodoRead(e *ent.Todo) *TodoRead {
+	if e == nil {
+		return nil
+	}
+	var ret TodoRead
+	ret.ID = e.ID
+	return &ret
+}
+
+func NewTodoReads(es []*ent.Todo) []TodoRead {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]TodoRead, len(es))
+	for i, e := range es {
+		r[i] = NewTodoRead(e).Elem()
+	}
+	return r
+}
+
+func (t *TodoRead) Elem() TodoRead {
+	if t == nil {
+		return TodoRead{}
+	}
+	return *t
+}
+
+func NewTodoUpdate(e *ent.Todo) *TodoUpdate {
+	if e == nil {
+		return nil
+	}
+	var ret TodoUpdate
+	ret.ID = e.ID
+	return &ret
+}
+
+func NewTodoUpdates(es []*ent.Todo) []TodoUpdate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]TodoUpdate, len(es))
+	for i, e := range es {
+		r[i] = NewTodoUpdate(e).Elem()
+	}
+	return r
+}
+
+func (t *TodoUpdate) Elem() TodoUpdate {
+	if t == nil {
+		return TodoUpdate{}
+	}
+	return *t
 }
 
 func NewUserCreate(e *ent.User) *UserCreate {

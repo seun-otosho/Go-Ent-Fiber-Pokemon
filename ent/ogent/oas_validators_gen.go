@@ -121,6 +121,12 @@ func (s ListGroupUsersOKApplicationJSON) Validate() error {
 	}
 	return nil
 }
+func (s ListNoteOKApplicationJSON) Validate() error {
+	if s == nil {
+		return errors.New("nil is invalid value")
+	}
+	return nil
+}
 func (s ListPetOKApplicationJSON) Validate() error {
 	if s == nil {
 		return errors.New("nil is invalid value")
@@ -157,6 +163,12 @@ func (s ListPokemonOKApplicationJSON) Validate() error {
 	return nil
 }
 func (s ListPokemonOpponentsOKApplicationJSON) Validate() error {
+	if s == nil {
+		return errors.New("nil is invalid value")
+	}
+	return nil
+}
+func (s ListTodoOKApplicationJSON) Validate() error {
 	if s == nil {
 		return errors.New("nil is invalid value")
 	}

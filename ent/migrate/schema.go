@@ -69,6 +69,20 @@ var (
 		Columns:    GroupsColumns,
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 	}
+	// NotesColumns holds the columns for the "notes" table.
+	NotesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "title", Type: field.TypeString, Unique: true},
+		{Name: "content", Type: field.TypeString},
+		{Name: "private", Type: field.TypeBool, Default: false},
+		{Name: "created_at", Type: field.TypeTime},
+	}
+	// NotesTable holds the schema information for the "notes" table.
+	NotesTable = &schema.Table{
+		Name:       "notes",
+		Columns:    NotesColumns,
+		PrimaryKey: []*schema.Column{NotesColumns[0]},
+	}
 	// PetsColumns holds the columns for the "pets" table.
 	PetsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -96,6 +110,16 @@ var (
 		Name:       "pokemons",
 		Columns:    PokemonsColumns,
 		PrimaryKey: []*schema.Column{PokemonsColumns[0]},
+	}
+	// TodosColumns holds the columns for the "todos" table.
+	TodosColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// TodosTable holds the schema information for the "todos" table.
+	TodosTable = &schema.Table{
+		Name:       "todos",
+		Columns:    TodosColumns,
+		PrimaryKey: []*schema.Column{TodosColumns[0]},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
@@ -139,8 +163,10 @@ var (
 		BattlesTable,
 		CarsTable,
 		GroupsTable,
+		NotesTable,
 		PetsTable,
 		PokemonsTable,
+		TodosTable,
 		UsersTable,
 		GroupUsersTable,
 	}

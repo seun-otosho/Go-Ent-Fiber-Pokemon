@@ -13,12 +13,20 @@ type CreateGroupRes interface {
 	createGroupRes()
 }
 
+type CreateNoteRes interface {
+	createNoteRes()
+}
+
 type CreatePetRes interface {
 	createPetRes()
 }
 
 type CreatePokemonRes interface {
 	createPokemonRes()
+}
+
+type CreateTodoRes interface {
+	createTodoRes()
 }
 
 type CreateUserRes interface {
@@ -41,12 +49,20 @@ type DeleteGroupRes interface {
 	deleteGroupRes()
 }
 
+type DeleteNoteRes interface {
+	deleteNoteRes()
+}
+
 type DeletePetRes interface {
 	deletePetRes()
 }
 
 type DeletePokemonRes interface {
 	deletePokemonRes()
+}
+
+type DeleteTodoRes interface {
+	deleteTodoRes()
 }
 
 type DeleteUserRes interface {
@@ -69,6 +85,10 @@ type ListGroupUsersRes interface {
 	listGroupUsersRes()
 }
 
+type ListNoteRes interface {
+	listNoteRes()
+}
+
 type ListPetRes interface {
 	listPetRes()
 }
@@ -83,6 +103,10 @@ type ListPokemonOpponentsRes interface {
 
 type ListPokemonRes interface {
 	listPokemonRes()
+}
+
+type ListTodoRes interface {
+	listTodoRes()
 }
 
 type ListUserCarsRes interface {
@@ -117,12 +141,20 @@ type ReadGroupRes interface {
 	readGroupRes()
 }
 
+type ReadNoteRes interface {
+	readNoteRes()
+}
+
 type ReadPetRes interface {
 	readPetRes()
 }
 
 type ReadPokemonRes interface {
 	readPokemonRes()
+}
+
+type ReadTodoRes interface {
+	readTodoRes()
 }
 
 type ReadUserRes interface {
@@ -141,12 +173,20 @@ type UpdateGroupRes interface {
 	updateGroupRes()
 }
 
+type UpdateNoteRes interface {
+	updateNoteRes()
+}
+
 type UpdatePetRes interface {
 	updatePetRes()
 }
 
 type UpdatePokemonRes interface {
 	updatePokemonRes()
+}
+
+type UpdateTodoRes interface {
+	updateTodoRes()
 }
 
 type UpdateUserRes interface {
